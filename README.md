@@ -110,7 +110,7 @@ positional arguments:
   project_dir               Path where the project will be created (e.g. '~/projects/robproj')
   base_img                  Base Docker image to use (e.g. 'eutrob/eut_ros:humble')
   image_main_user           Active user to use in the resulting Docker image
-  ros_distro                ROS distro to use: noetic (ros1), humble (ros2), jazzy (ros2)
+  ros_distro                ROS distro to use: humble (ros2), jazzy (ros2)
 
 options:
   --img-id IMG_ID           ID of the resulting Docker image (e.g. 'robproj:humble'). If not set, defaults to '<project-id>:latest'
@@ -141,7 +141,7 @@ Creates a new VSCode project based on templates
 
 positional arguments:
   project_id            Short project identifier (e.g. 'robproj')
-  ros_distro            ROS distro to use: noetic (ros1), humble (ros2), jazzy (ros2)
+  ros_distro            ROS distro to use: humble (ros2), jazzy (ros2)
   img_id                ID of the Docker image that VSCode will use to create a container
   image_main_user       User to use inside the container
   workspace_dir         Path to the VSCode workspace on host (created if missing)

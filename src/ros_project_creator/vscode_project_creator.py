@@ -74,6 +74,7 @@ class VscodeProjectCreator:
             # ros_distro.
             ros_variant_yaml_file = self._resources_dir.joinpath('ros/ros_variants.yaml')
             self._ros_variant = RosVariant(ros_distro, ros_variant_yaml_file)
+            self._assert_ros2_variant()
 
             self._img_id = Utilities.clean_str(img_id)
             Utilities.assert_non_empty(img_id, 'Image id must be a non-empty string')
@@ -133,16 +134,10 @@ class VscodeProjectCreator:
                 self._use_git = False
                 self._gitconfig_file = None
 
-            if self._ros_variant.get_version() == 1:
-                self._build_release_cmd = 'rosbuild.sh'
-                self._build_debug_cmd = 'rosbuild.sh --cmake-args -DCMAKE_BUILD_TYPE=Debug'
-                self._build_relwithdebinfo_cmd = 'rosbuild.sh --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo'
-                self._clean_cmd = 'catkin clean --yes --verbose --force'
-            else:
-                self._build_release_cmd = 'rosbuild.sh'
-                self._build_debug_cmd = 'rosbuild.sh --mixin debug'
-                self._build_relwithdebinfo_cmd = 'rosbuild.sh --mixin rel-with-deb-info'
-                self._clean_cmd = 'colcon clean workspace -y'
+            self._build_release_cmd = 'rosbuild.sh'
+            self._build_debug_cmd = 'rosbuild.sh --mixin debug'
+            self._build_relwithdebinfo_cmd = 'rosbuild.sh --mixin rel-with-deb-info'
+            self._clean_cmd = 'colcon clean workspace -y'
 
             self._install_items()
         # trim_block removes the first newline after a block (e.g., after {% endif %}).
@@ -150,6 +145,13 @@ class VscodeProjectCreator:
         except Exception as e:
             self._logger.error(f'{e}')
             raise
+
+    def _assert_ros2_variant(self) -> None:
+        if self._ros_variant.get_version() != 2:
+            raise VscodeProjectCreatorException(
+                f"ROS distro '{self._ros_variant.get_distro()}' is ROS {self._ros_variant.get_version()}. "
+                'ros_project_creator currently supports ROS 2 only.'
+            )
 
     def _create_items_to_install(self) -> None:
         service = 'devcont'

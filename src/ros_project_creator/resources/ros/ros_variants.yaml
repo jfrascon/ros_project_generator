@@ -1,11 +1,3 @@
-noetic:
-  ros_distro: noetic
-  ros_version: 1
-  ubuntu_version: "20.04"
-  python_version: "3.8"
-  c_version: 99
-  cpp_version: 14
-
 humble:
   ros_distro: humble
   ros_version: 2
