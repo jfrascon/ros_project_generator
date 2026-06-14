@@ -1,0 +1,34 @@
+{
+    "dockerComposeFile": "docker-compose.yaml",
+    "service": "{{ service }}",
+    "updateRemoteUserUID": true, // Let vscode update the user uid/gid to match host user.
+    "overrideCommand": false, // Our entrypoint.sh is not overriden. Our entrypoint only source environment.
+    // Priority: devcontainer.containerUser > compose_file.user > image.last_user_command
+    "containerUser": "root",
+    "remoteUser": "{{ img_user }}",
+    "shutdownAction": "stopCompose",
+    "workspaceFolder": "{{ img_workspace_dir }}",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "charliermarsh.ruff",
+                "cheshirekow.cmake-format",
+                "docker.docker",
+                "foxundermoon.shell-format@7.2.5",
+                "ms-azuretools.vscode-containers",
+                "ms-python.debugpy",
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-vscode.cmake-tools",
+                "ms-vscode.cpptools",
+                "ms-vscode.hexeditor",
+                "ranch-hand-robotics.rde-pack",
+                "redhat.vscode-xml",
+                "redhat.vscode-yaml",
+                "ryzngard.vscode-header-source",
+                "tamasfe.even-better-toml",
+                "zainchen.json"
+            ]
+        }
+    }
+}

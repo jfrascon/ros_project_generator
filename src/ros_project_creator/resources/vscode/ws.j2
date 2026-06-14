@@ -1,0 +1,159 @@
+{
+  "folders": [
+    {
+      "path": ".",
+      "name": "{{ project_id }}"
+    },
+    {
+        "path": "src/0_deps"
+    }
+  ],
+"settings": {
+    "editor.autoIndent": "full",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "editor.detectIndentation": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "modificationsIfAvailable",
+    "editor.formatOnType": true,
+    "editor.lineNumbers": "relative",
+    "editor.rulers": [
+      120
+    ],
+    "editor.semanticHighlighting.enabled": true,
+    "files.associations": {
+        "*.config": "properties",
+        "*.json": "jsonc",
+        "*.launch": "xml",
+        "*.sdf": "xml",
+        "*.urdf": "xml",
+        "*.xacro": "xml",
+        "*.world": "xml"
+    },
+    "files.autoSave": "onFocusChange",
+    "files.autoSaveDelay": 30000,
+    "files.exclude": {
+        "build/": true,
+        "install/": true,
+        "devel/": true,
+        "log/": true,
+        "logs/": true,
+        "/.git": true,
+        "/.svn": true,
+        "/.hg": true,
+        "/.DS_Store": true,
+        "src/0_deps/": true,
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true,
+        "**/.ruff_cache": true,
+        "**/.cache": true,
+        "**/.idea": true,
+        "**/CMakeFiles": true,
+        "**/CMakeCache.txt": true,
+        "**/Thumbs.db": true,
+    },
+    "files.watcherExclude": {
+        "build/": true,
+        "install/": true,
+        "devel/": true,
+        "log/": true,
+        "logs/": true,
+        "**/.git/**": true,
+        "src/0_deps/**": true,
+        "**/__pycache__/**": true,
+        "**/.pytest_cache/**": true,
+        "**/.mypy_cache/**": true,
+        "**/.ruff_cache/**": true,
+        "**/.cache/**": true,
+        "**/.idea/**": true,
+        "**/CMakeFiles/**": true,
+        "**/CMakeCache.txt": true
+    },
+    "files.saveConflictResolution": "overwriteFileOnDisk",
+    "files.trimTrailingWhitespace": true,
+    "search.exclude": {
+        "/node_modules": true,
+        "/bower_components": true,
+        "src/0_deps/": true,
+        "**/.git/**": true,
+        "/*.code-search": true,
+        "**/__pycache__/**": true,
+        "**/.pytest_cache/**": true,
+        "**/.mypy_cache/**": true,
+        "**/.ruff_cache/**": true,
+        "**/.cache/**": true,
+        "**/.idea/**": true,
+        "**/CMakeFiles/**": true,
+        "**/CMakeCache.txt": true
+    },
+    // ==========================================================================
+    // CPP SETTINGS
+    // ==========================================================================
+    "C_Cpp.enhancedColorization": "enabled",
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.loggingLevel": "Debug",
+    "[cpp]": {
+      "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_style": "file",
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "C_Cpp.codeAnalysis.runAutomatically": false,
+    "C_Cpp.codeAnalysis.clangTidy.path": "/usr/bin/clang-tidy",
+    "C_Cpp.codeAnalysis.clangTidy.useBuildPath": true,
+    // Configure glob patterns for excluding folders and files for code analysis.
+    "C_Cpp.codeAnalysis.exclude": {
+      "**/build": true,
+      "**/devel": true,
+      "**/install": true,
+      "**/log": true,
+      "**/.git": true
+    },
+    // ==========================================================================
+    // PYTHON SETTINGS
+    // ==========================================================================
+    "python.autoComplete.extraPaths": [
+      "/opt/ros/{{ ros_distro }}/lib/python{{ python_version }}/site-packages",
+      "${workspaceFolder}/src"
+    ],
+    "python.analysis.autoFormatStrings": true,
+    "python.analysis.extraPaths": [
+      "/opt/ros/{{ ros_distro }}/lib/python{{ python_version }}/site-packages",
+      "${workspaceFolder}/src"
+    ],
+    "python.analysis.typeCheckingMode": "standard",
+    "python.languageServer": "Pylance",
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "modificationsIfAvailable",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "always",
+            "source.organizeImports": "never",
+            "source.organizeImports.ruff": "always"
+        }
+    },
+    // ==========================================================================
+    // ROS
+    // ==========================================================================
+    "ros.distro": "{{ ros_distro }}"
+    // ==========================================================================
+    // RUFF
+    // ==========================================================================
+    //"ruff.configuration": leave it empty to use the pyproject.toml file of each repo.
+    "ruff.importStrategy": "fromEnvironment",
+    "ruff.nativeServer": "on",
+    // ==========================================================================
+    // XML
+    // ==========================================================================
+    "[xml]": {
+      "editor.defaultFormatter": "redhat.vscode-xml",
+      "editor.formatOnSave": false,
+      "editor.formatOnPaste": false,
+      "editor.formatOnType": false
+    }
+  }
+}

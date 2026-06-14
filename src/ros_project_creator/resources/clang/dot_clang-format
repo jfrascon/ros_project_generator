@@ -1,0 +1,108 @@
+#http://clang.llvm.org/docs/ClangFormatStyleOptions.html
+#clang-format-9 --dump-config
+# https://zed0.co.uk/clang-format-configurator/
+---
+BasedOnStyle: 'LLVM'
+AccessModifierOffset: '0'
+AlignAfterOpenBracket: 'Align'
+AlignConsecutiveAssignments: 'true'
+AlignConsecutiveDeclarations: 'false'
+AlignConsecutiveMacros: 'true'
+AlignEscapedNewlines: 'Right'
+AlignOperands: 'true'
+AlignTrailingComments: 'true'
+AllowAllArgumentsOnNextLine: 'false'
+AllowAllConstructorInitializersOnNextLine: 'false'
+AllowAllParametersOfDeclarationOnNextLine: 'false'
+AllowShortBlocksOnASingleLine: 'false'
+AllowShortCaseLabelsOnASingleLine: 'false'
+AllowShortFunctionsOnASingleLine: 'Empty'
+AllowShortIfStatementsOnASingleLine: 'Never'
+AllowShortLambdasOnASingleLine: 'Empty'
+AllowShortLoopsOnASingleLine: 'false'
+AlwaysBreakAfterDefinitionReturnType: 'None'
+AlwaysBreakAfterReturnType: 'None'
+AlwaysBreakBeforeMultilineStrings: 'false'
+AlwaysBreakTemplateDeclarations: 'Yes'
+BinPackArguments: 'false'
+BinPackParameters: 'false'
+BraceWrapping:
+  AfterCaseLabel: 'true'
+  AfterClass: 'true'
+  AfterControlStatement: 'true'
+  AfterEnum: 'true'
+  AfterExternBlock: 'true'
+  AfterFunction: 'true'
+  AfterNamespace: 'true'
+  AfterObjCDeclaration: 'true'
+  AfterStruct: 'true'
+  AfterUnion: 'true'
+  BeforeCatch: 'true'
+  BeforeElse: 'true'
+  IndentBraces: 'false'
+  SplitEmptyFunction: 'false'
+  SplitEmptyRecord: 'false'
+  SplitEmptyNamespace: 'false'
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Custom
+BreakBeforeTernaryOperators: 'false'
+BreakConstructorInitializers: 'AfterColon'
+BreakInheritanceList: 'AfterColon'
+BreakStringLiterals: 'true'
+ColumnLimit: '100'
+CommentPragmas: '^ IWYU pragma:'
+CompactNamespaces: 'false'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+ConstructorInitializerIndentWidth: '2'
+ContinuationIndentWidth: '2'
+Cpp11BracedListStyle: 'true'
+DerivePointerAlignment: 'false'
+DisableFormat: 'false'
+ExperimentalAutoDetectBinPacking: 'false'
+FixNamespaceComments: 'true'
+ForEachMacros:
+  - foreach
+  - Q_FOREACH
+  - BOOST_FOREACH
+IncludeBlocks: 'Preserve'
+IndentCaseLabels: 'true'
+IndentPPDirectives: 'AfterHash'
+IndentWidth: '2'
+IndentWrappedFunctionNames: 'true'
+KeepEmptyLinesAtTheStartOfBlocks: 'false'
+Language: 'Cpp'
+MaxEmptyLinesToKeep: '2'
+NamespaceIndentation: 'All'
+PenaltyBreakAssignment: 100000
+# PenaltyBreakBeforeFirstCallParameter: 1000
+# PenaltyBreakComment: 300
+# PenaltyBreakFirstLessLess: 1200
+# PenaltyBreakString: 1000
+# PenaltyBreakTemplateDeclaration: 1000
+PenaltyExcessCharacter: 10000
+PenaltyReturnTypeOnItsOwnLine: 10000
+PointerAlignment: 'Left'
+ReflowComments: 'true'
+SortIncludes: 'false'
+SortUsingDeclarations: 'true'
+SpaceAfterCStyleCast: 'false'
+SpaceAfterLogicalNot: 'false'
+SpaceAfterTemplateKeyword: 'false'
+SpaceBeforeAssignmentOperators: 'true'
+SpaceBeforeCpp11BracedList: 'false'
+SpaceBeforeCtorInitializerColon: 'false'
+SpaceBeforeInheritanceColon: 'false'
+SpaceBeforeParens: 'Never'
+SpaceBeforeRangeBasedForLoopColon: 'false'
+SpaceInEmptyParentheses: 'false'
+SpacesBeforeTrailingComments: '2'
+SpacesInAngles: 'false'
+SpacesInCStyleCastParentheses: 'false'
+SpacesInContainerLiterals: 'false'
+SpacesInParentheses: 'false'
+SpacesInSquareBrackets: 'false'
+Standard: 'Cpp11'
+TabWidth: '2'
+UseTab: 'Never'
+
+...

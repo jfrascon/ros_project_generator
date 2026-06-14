@@ -1,0 +1,69 @@
+# https://docs.docker.com/compose/environment-variables/#the-env-file
+services:
+  {{ service }}:
+    image: {{ img_id }}
+    user: root
+    privileged: false
+    cap_add:
+      - NET_ADMIN # Be able to create network devices inside the container
+    network_mode: host
+    tty: true
+    stdin_open: true
+    {% if use_host_nvidia_driver %}
+    runtime: nvidia
+    # Ref: https://docs.nvidia.com/deeplearning/frameworks/user-guide/index.html#setincshmem
+    shm_size: 2g
+    {% endif %}
+    volumes:
+      # +------------------+
+      # | Project mappings |
+      # +------------------+
+      - {{ workspace_dir }}:{{ img_workspace_dir}}
+      # +------------------+
+      # | Dataset mappings |
+      # +------------------+
+      #- ~/datasets:{{ img_datasets_dir }}
+      # +-------------------+
+      # | Graphics mappings |
+      # +-------------------+
+      - /tmp/.cookies.xauth:/tmp/.cookies.xauth:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # +-----------------+
+      # | Custom mappings |
+      # +-----------------+
+      # Folders
+      - ~/.ssh:{{ img_ssh_dir }}
+      # Files
+      {% if use_git %}
+      - {{ gitconfig_file }}:{{ img_gitconfig_file }}
+      {% endif %}
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+      {% if not use_host_nvidia_driver %}
+      - /dev/dri:/dev/dri
+      {% endif %}
+    #device_cgroup_rules:
+      #- "c 189:* rmw"
+    environment:
+      - DISPLAY=$DISPLAY
+      - QT_X11_NO_MITSHM=1
+      - TERM=$TERM
+      - XAUTHORITY=/tmp/.cookies.xauth
+      {% if use_host_nvidia_driver %}
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      {% endif %}
+      - HOST_UID={{ host_uid }}
+      - HOST_UPGID={{ host_upgid }}
+      {% if ros_version == 1 %}
+      - ROS_MASTER_URI="http://localhost:11311"
+      - ROS_HOSTNAME="localhost"
+      {% else %}
+      - ROS_DOMAIN_ID=0 # Default ROS_DOMAIN_ID. Consider changing it to avoid conflicts with other ROS systems.
+      {% if ros_distro == "humble" %}
+      - ROS_LOCALHOST_ONLY="1"
+      {% else %}
+      - ROS_AUTOMATIC_DISCOVERY_RANGE="LOCALHOST"
+      {% endif %}
+      - RMW_IMPLEMENTATION="rmw_fastrtps_cpp"
+      {% endif %}

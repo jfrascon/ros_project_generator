@@ -1,0 +1,71 @@
+# To use:
+#
+#     pre-commit run -a
+#
+# Or:
+#
+#     pre-commit install  # (runs every time you commit in git)
+#
+# To update this file:
+#
+#     pre-commit autoupdate
+#
+# See https://github.com/pre-commit/pre-commit
+
+default_install_hook_types:
+  - pre-commit
+  - commit-msg
+
+repos:
+  # Standard hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-yaml
+      - id: check-json
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+      - id: no-commit-to-branch
+        args:
+          - --branch=main
+          - --branch=master
+
+  # Python hooks
+  # Ruff replaces both Black (formatter) and isort (import sorting)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Find the latest version from https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.12
+    hooks:
+      # Run the linter and automatically fix any safe issues.
+      - id: ruff
+        args: [--fix, --config, pyproject.toml]
+      # Run the formatter.
+      - id: ruff-format
+        args: [--config, pyproject.toml]
+
+  # CPP hooks
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v21.1.0
+    hooks:
+      - id: clang-format
+        files: \.(cpp|hpp|c|h)$
+
+  # Shell hooks
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.12.0-2
+    hooks:
+      - id: shfmt
+        args: [-w, -s, -i=4]
+
+  # Conventional Commits validation (commit message hook)
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.2.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: []

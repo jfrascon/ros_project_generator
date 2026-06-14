@@ -1,0 +1,55 @@
+[project]
+name = "ros_project_creator"
+version = "1.0.0"
+description = "A tool for generating ROS projects with automation and DevOps practices"
+readme = "README.md"
+authors = [
+    { name = "Juan Francisco Rascon", email = "jfrascon@gmail.com" },
+]
+maintainers = [
+    { name = "Juan Francisco Rascon", email = "jfrascon@gmail.com" },
+]
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = ["argcomplete", "colorama", "jinja2", "pre-commit", "PyYAML", "robotics-dockers"]
+keywords = ["ROS", "automation", "project generator", "Robotics DevOps"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.urls]
+Repository = "https://ice.eurecat.org/gitlab/robotics-automation/ros_project_creator"
+Issues = "https://ice.eurecat.org/gitlab/robotics-automation/ros_project_creator/issues"
+Homepage = "https://ice.eurecat.org/gitlab/robotics-automation/ros_project_creator"
+
+[project.scripts]
+create_ros_project = "ros_project_creator.create_ros_project:main"
+create_vscode_project = "ros_project_creator.create_vscode_project:main"
+
+[project.optional-dependencies]
+dev = ["black", "pytest"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ros_project_creator"]
+include = ["src/ros_project_creator/resources/**"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/ros_project_creator", "src/ros_project_creator/resources/**", "README.md", "LICENSE*"]
+
+[tool.uv]
+managed = true
+
+[tool.black]
+line-length = 120

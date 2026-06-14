@@ -1,0 +1,49 @@
+"""
+ros_project_creator
+
+This package provides tools for creating and configuring ROS-based development projects
+with Docker, VSCode, CI/CD and ROS best practices.
+
+Public API:
+
+- `RosProjectCreator`: creates a ROS project from templates, including Docker setup,
+  workspace structure, optional VSCode integration, and pre-commit support.
+
+- `VscodeProjectCreator`: creates or updates the VSCode `.devcontainer` environment
+  configuration for an existing project.
+
+Usage example:
+
+    from pathlib import Path
+    from ros_project_creator import RosProjectCreator
+
+    creator = RosProjectCreator(
+        project_id="myrobot",
+        project_dir=Path("/home/user/dev/myrobot"),
+        ros_distro="humble",
+        base_img="eutrob/eut_ros:humble",
+        image_main_user="developer",
+        img_id="myrobot:latest",
+        use_vscode_project=True,
+        use_pre_commit=True,
+    )
+
+Note: Internal utilities used by this package (e.g. `Utilities`, `ColorizedLogger`)
+are not part of the public API and should not be used directly.
+"""
+
+__all__ = ["RosProjectCreator", "VscodeProjectCreator"]
+
+
+def __getattr__(name: str):
+    if name == "RosProjectCreator":
+        from .ros_project_creator import RosProjectCreator
+
+        return RosProjectCreator
+
+    if name == "VscodeProjectCreator":
+        from .vscode_project_creator import VscodeProjectCreator
+
+        return VscodeProjectCreator
+
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
