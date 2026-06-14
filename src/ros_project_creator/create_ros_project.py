@@ -13,7 +13,7 @@ from ros_project_creator.utilities import Utilities
 def main():
     try:
         if os.geteuid() == 0:
-            raise RuntimeError('ERROR: This script must not be run with sudo or as root')
+            raise RuntimeError('This script must not be run with sudo or as root')
 
         resources_dir = Path(__file__).parent.joinpath('resources')
         ros_variants = Utilities.load_yaml(resources_dir.joinpath('ros', 'ros_variants.yaml'))

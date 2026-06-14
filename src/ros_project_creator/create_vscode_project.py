@@ -16,7 +16,7 @@ from ros_project_creator.vscode_project_creator import (
 def main():
     try:
         if os.geteuid() == 0:
-            raise RuntimeError('ERROR: This script must not be run with sudo or as root')
+            raise RuntimeError('This script must not be run with sudo or as root')
 
         resources_path = Path(__file__).parent.joinpath('resources')
         ros_variants = Utilities.load_yaml(resources_path.joinpath('ros', 'ros_variants.yaml'))
