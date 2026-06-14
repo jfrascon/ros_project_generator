@@ -63,7 +63,7 @@ class VscodeProjectCreator:
             Utilities.assert_dir_existence(self._resources_dir, f"Path '{str(self._resources_dir)}' is required")
 
             self._project_id = Utilities.clean_str(project_id)
-            Utilities.assert_non_empty(project_id, 'Project id must be a non-empty string')
+            Utilities.assert_non_empty(self._project_id, 'Project id must be a non-empty string')
 
             # Get the ros_variant (ros_distro, ros_version, cpp_version, c_version) associated to the passed
             # ros_distro.
@@ -72,10 +72,10 @@ class VscodeProjectCreator:
             self._assert_ros2_variant()
 
             self._img_id = Utilities.clean_str(img_id)
-            Utilities.assert_non_empty(img_id, 'Image id must be a non-empty string')
+            Utilities.assert_non_empty(self._img_id, 'Image id must be a non-empty string')
 
             self._img_user = Utilities.clean_str(img_user)
-            Utilities.assert_non_empty(img_user, 'Image user must be a non-empty string')
+            Utilities.assert_non_empty(self._img_user, 'Image user must be a non-empty string')
 
             # The paths on the image side, in the docker-compose file, must be absolute paths.
             # The img_datasets_dir and the img_ssh_dir will be created from the img_user_home path,
@@ -130,11 +130,12 @@ class VscodeProjectCreator:
                 self._gitconfig_file = None
 
             self._install_items()
-        # trim_block removes the first newline after a block (e.g., after {% endif %}).
-        # lstrip_blocks strips leading whitespace from the start of a block line.
-        except Exception as e:
+        except VscodeProjectCreatorException as e:
             self._logger.error(f'{e}')
             raise
+        except Exception as e:
+            self._logger.error(f'{e}')
+            raise VscodeProjectCreatorException(f'{e}') from e
 
     def _assert_ros2_variant(self) -> None:
         if self._ros_variant.get_version() != 2:

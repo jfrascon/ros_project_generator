@@ -5,6 +5,7 @@ import pytest
 
 import ros_project_creator.ros_project_creator as ros_project_creator_module
 from ros_project_creator.ros_project_creator import RosProjectCreator, RosProjectCreatorException
+from ros_project_creator.vscode_project_creator import VscodeProjectCreator, VscodeProjectCreatorException
 
 
 @pytest.fixture
@@ -142,3 +143,32 @@ def test_rejects_unsupported_ros_distro(fake_active_user: Path, fake_docker_gene
         )
 
     assert fake_docker_generator == []
+
+
+@pytest.mark.parametrize(
+    ('field_name', 'field_value'),
+    [
+        ('project_id', '   '),
+        ('img_id', '   '),
+        ('img_user', '   '),
+    ],
+)
+def test_vscode_project_rejects_blank_string_parameters(
+    tmp_path: Path,
+    field_name: str,
+    field_value: str,
+) -> None:
+    params = {
+        'project_id': 'demo',
+        'ros_distro': 'jazzy',
+        'img_id': 'demo:latest',
+        'img_user': 'developer',
+        'img_user_home': Path('/home/developer'),
+        'workspace_dir': tmp_path / 'workspace',
+        'img_workspace_dir': Path('/home/developer/workspace'),
+        'use_console_log': False,
+    }
+    params[field_name] = field_value
+
+    with pytest.raises(VscodeProjectCreatorException, match='must be a non-empty string'):
+        VscodeProjectCreator(**params)
