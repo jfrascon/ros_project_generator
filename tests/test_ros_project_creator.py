@@ -130,7 +130,7 @@ def test_rejects_root_image_user(fake_active_user: Path, fake_docker_generator) 
 
 
 def test_rejects_unsupported_ros_distro(fake_active_user: Path, fake_docker_generator) -> None:
-    with pytest.raises(Exception, match='Allowed ROS distros'):
+    with pytest.raises(RosProjectCreatorException, match='Allowed ROS distros'):
         RosProjectCreator(
             project_id='demo',
             project_dir=fake_active_user / 'noetic',
@@ -141,6 +141,38 @@ def test_rejects_unsupported_ros_distro(fake_active_user: Path, fake_docker_gene
             use_pre_commit=False,
             use_console_log=False,
         )
+
+    assert fake_docker_generator == []
+
+
+@pytest.mark.parametrize(
+    ('field_name', 'field_value'),
+    [
+        ('project_id', '   '),
+        ('base_img', '   '),
+        ('image_main_user', '   '),
+    ],
+)
+def test_ros_project_rejects_blank_string_parameters(
+    fake_active_user: Path,
+    fake_docker_generator,
+    field_name: str,
+    field_value: str,
+) -> None:
+    params = {
+        'project_id': 'demo',
+        'project_dir': fake_active_user / f'blank_{field_name}',
+        'ros_distro': 'jazzy',
+        'base_img': 'ros:jazzy',
+        'image_main_user': 'developer',
+        'img_id': 'demo:latest',
+        'use_pre_commit': False,
+        'use_console_log': False,
+    }
+    params[field_name] = field_value
+
+    with pytest.raises(RosProjectCreatorException, match='must be a non-empty string'):
+        RosProjectCreator(**params)
 
     assert fake_docker_generator == []
 

@@ -178,13 +178,13 @@ class RosProjectCreator:
 
             self._install_items()
 
-            # Create VSCode project if requested.
+            # Create VS Code project if requested.
             if use_vscode_project:
                 self._vscode_project_creator = VscodeProjectCreator(
-                    self._project_id,  # type: ignore
+                    self._project_id,
                     self._ros_variant.get_distro(),
                     self._img_id,
-                    self._image_main_user,  # type: ignore
+                    self._image_main_user,
                     self._image_main_user_home,
                     self._project_dir,
                     self._img_workspace_dir,
@@ -201,6 +201,9 @@ class RosProjectCreator:
         except RosProjectCreatorException as e:
             self._logger.error(f'{e}')
             raise
+        except Exception as e:
+            self._logger.error(f'{e}')
+            raise RosProjectCreatorException(f'{e}') from e
 
     def _check_git_binary_existence(self) -> None:
         # Check git binary existence.
