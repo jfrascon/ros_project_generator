@@ -63,7 +63,14 @@ def main():
             default=False,
         )
 
-        parser.add_argument('--log-file', '--log_file', dest='log_file', type=str, help='File to log output', default='')
+        parser.add_argument(
+            '--log-file',
+            '--log_file',
+            dest='log_file',
+            type=str,
+            help='File to log output',
+            default='',
+        )
         parser.add_argument(
             '--log-level',
             '--log_level',
@@ -82,8 +89,14 @@ def main():
         args = parser.parse_args()
 
         # Derive img_user_home if not provided
-        img_user = Utilities.clean_str(args.img_user)  # type: ignore
-        img_user_home_str = Utilities.clean_str(args.img_user_home)  # type: ignore
+        project_id = Utilities.clean_str(args.project_id)
+        ros_distro = Utilities.clean_str(args.ros_distro)
+        img_id = Utilities.clean_str(args.img_id)
+        img_user = Utilities.clean_str(args.img_user)
+        workspace_dir = Path(Utilities.clean_str(args.workspace_dir))
+        img_workspace_dir = Path(Utilities.clean_str(args.img_workspace_dir))
+        img_user_home_str = Utilities.clean_str(args.img_user_home)
+
         if not img_user_home_str or img_user_home_str == '':
             if img_user == 'root':
                 img_user_home_str = '/root'
@@ -92,18 +105,18 @@ def main():
 
         img_user_home_path = Path(img_user_home_str)
         if not img_user_home_path.is_absolute():
-            raise RuntimeError("Image user home path must be an absolute path")
+            raise RuntimeError('Image user home path must be an absolute path')
 
         VscodeProjectCreator(
-            Utilities.clean_str(args.project_id),  # type: ignore
-            Utilities.clean_str(args.ros_distro),  # type: ignore
-            Utilities.clean_str(args.img_id),  # type: ignore
-            img_user,  # already cleaned
+            project_id,
+            ros_distro,
+            img_id,
+            img_user,
             img_user_home_path,
-            Path(Utilities.clean_str(args.workspace_dir)),  # type: ignore
-            Path(Utilities.clean_str(args.img_workspace_dir)),  # type: ignore
+            workspace_dir,
+            img_workspace_dir,
             args.use_host_nvidia_driver,
-            not args.no_console_log,  # parameter is used_console_log, so it is inverted # type: ignore
+            not args.no_console_log,
             args.log_file,
             args.log_level,
         )
@@ -111,7 +124,6 @@ def main():
         sys.exit(1)
     except Exception as e:
         print(f'{e}', file=sys.stderr)
-        # traceback.print_exc()
         sys.exit(1)
 
 

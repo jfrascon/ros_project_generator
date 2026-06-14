@@ -35,7 +35,13 @@ class ResourceSpec:
         context: Optional[dict[str, Any]] = None,
         executable: bool = False,
     ) -> 'ResourceSpec':
-        return cls(destination=destination, kind='template', source=source, context=context or {}, executable=executable)
+        return cls(
+            destination=destination,
+            kind='template',
+            source=source,
+            context=context or {},
+            executable=executable,
+        )
 
 
 @dataclass(frozen=True)

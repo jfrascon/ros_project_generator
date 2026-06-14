@@ -54,7 +54,7 @@ class RosProjectCreator:
             base_img (str): Absolute path under the user's home where the project will be created
             img_id (str): The image ID.
             image_main_user (str): Main user for the image.
-            use_vscode_project (bool): Whether to create a VSCode project.
+            use_vscode_project (bool): Whether to create a VS Code project.
             use_pre_commit (bool): Whether to use pre-commit.
             use_console_log (bool): Whether to log to console.
             log_file (str): The file to log to.
