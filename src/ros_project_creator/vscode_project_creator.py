@@ -163,7 +163,7 @@ class VscodeProjectCreator:
                 False,
             ],
             '.devcontainer/docker-compose.yaml': [
-                'docker/docker-compose.j2',
+                'vscode/docker-compose.j2',
                 {
                     'service': service,
                     'img_id': self._img_id,

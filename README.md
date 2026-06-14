@@ -98,9 +98,8 @@ This script creates a structured ROS project based on predefined templates.
 
 ```sh
 > create_ros_project -h
-usage: create_ros_project [--img-id IMG_ID] [--use-base-img-entrypoint] [--no-environment] [--use-host-nvidia-driver]
-                          [--no-vscode] [--no-pre-commit] [--no-console-log] [--log-file LOG_FILE]
-                          [--log-level LOG_LEVEL] [-h]
+usage: create_ros_project [--img-id IMG_ID] [--use-host-nvidia-driver] [--no-vscode] [--no-pre-commit]
+                          [--no-console-log] [--log-file LOG_FILE] [--log-level LOG_LEVEL] [-h]
                           project_id project_dir base_img image_main_user ros_distro
 
 Creates a new ROS project based on templates
@@ -114,9 +113,6 @@ positional arguments:
 
 options:
   --img-id IMG_ID           ID of the resulting Docker image (e.g. 'robproj:humble'). If not set, defaults to '<project-id>:latest'
-  --use-base-img-entrypoint
-                            Inherit the base image's entrypoint (if any)
-  --no-environment          Do not create an environment script (use only if you provide your own)
   --use-host-nvidia-driver
                             Use host's NVIDIA driver inside the container
   --no-vscode               Do not create VSCode project

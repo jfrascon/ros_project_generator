@@ -56,18 +56,6 @@ def main():
             ),
         )
 
-        parser.add_argument(
-            '--use-base-img-entrypoint',
-            action='store_true',
-            help="The image will inherit the base image's entrypoint, if any",
-        )
-
-        parser.add_argument(
-            '--no-environment',
-            action='store_true',
-            help='Do not use an environment script. Do not use this option if you set a custom environment script',
-        )
-
         parser.add_argument('--use-host-nvidia-driver', action='store_true', help="Use host's NVIDIA driver")
 
         parser.add_argument('--no-vscode', action='store_true', help='Do not create VSCode project')
@@ -92,20 +80,18 @@ def main():
         args = parser.parse_args()
 
         RosProjectCreator(
-            args.project_id,
-            Path(args.project_dir),
-            args.ros_distro,
-            args.base_img,
-            args.img_user,
-            args.img_id,
-            args.use_base_img_entrypoint,
-            not args.no_environment,  # parameter is use_environment_script, so it is inverted
-            args.use_host_nvidia_driver,
-            not args.no_vscode,  # parameter is use_vscode_project, so it is inverted
-            not args.no_pre_commit,  # parameter is used_pre_commit, so it is inverted
-            not args.no_console_log,  # parameter is used_console_log, so it is inverted
-            args.log_file,
-            args.log_level,
+            project_id=args.project_id,
+            project_dir=Path(args.project_dir),
+            ros_distro=args.ros_distro,
+            base_img=args.base_img,
+            image_main_user=args.img_user,
+            img_id=args.img_id,
+            use_host_nvidia_driver=args.use_host_nvidia_driver,
+            use_vscode_project=not args.no_vscode,
+            use_pre_commit=not args.no_pre_commit,
+            use_console_log=not args.no_console_log,
+            log_file=args.log_file,
+            log_level=args.log_level,
         )
     except RosProjectCreatorException:
         sys.exit(1)
