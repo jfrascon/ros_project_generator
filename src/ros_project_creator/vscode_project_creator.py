@@ -6,7 +6,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from ros_project_creator.colorizedlogs import ColorizedLogger
+from ros_project_creator.logging_utils import create_logger
 from ros_project_creator.ros_variant import RosVariant
 from ros_project_creator.utilities import Utilities
 
@@ -56,10 +56,9 @@ class VscodeProjectCreator:
         # '/home/<user>', it may not be the case in some images, because it is not a requirement
         # to meet that pattern.
 
-        # The constructor may raise an Exception. It is not wrapped in a try-except block
-        # because the exception handler logs the error. However, if the logger's construction
-        # fails, logging statements cannot be executed.
-        self._logger = ColorizedLogger(
+        # Logger construction is intentionally outside the try-except block because the
+        # exception handler below needs a valid logger to report setup failures.
+        self._logger = create_logger(
             name='VscodeProjectCreator', use_console_log=use_console_log, log_file=log_file, log_level=log_level
         )
         try:

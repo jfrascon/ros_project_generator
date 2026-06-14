@@ -11,7 +11,7 @@ maintainers = [
 ]
 license = { text = "MIT" }
 requires-python = ">=3.9"
-dependencies = ["argcomplete", "colorama", "jinja2", "pre-commit", "PyYAML"]
+dependencies = ["argcomplete", "jinja2", "pre-commit", "PyYAML"]
 keywords = ["ROS", "automation", "project generator", "Robotics DevOps"]
 classifiers = [
     "Development Status :: 4 - Beta",

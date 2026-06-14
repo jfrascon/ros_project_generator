@@ -11,7 +11,7 @@ from jinja2 import Environment, FileSystemLoader
 from robotics_dockers import DockerContextConfig, generate_docker_context
 from robotics_dockers.errors import RoboticsDockersError
 
-from ros_project_creator.colorizedlogs import ColorizedLogger
+from ros_project_creator.logging_utils import create_logger
 from ros_project_creator.ros_variant import RosVariant
 from ros_project_creator.utilities import Utilities
 from ros_project_creator.vscode_project_creator import VscodeProjectCreator
@@ -65,10 +65,9 @@ class RosProjectCreator:
             Exception: If any of the parameters are invalid or if any required files are missing.
         """
 
-        # The constructor may raise an Exception. It is not wrapped in a try-except block
-        # because the exception handler logs the error. However, if the logger's construction
-        # fails, logging statements cannot be executed.
-        self._logger = ColorizedLogger(
+        # Logger construction is intentionally outside the try-except block because the
+        # exception handler below needs a valid logger to report setup failures.
+        self._logger = create_logger(
             name='RosProjectCreator', use_console_log=use_console_log, log_file=log_file, log_level=log_level
         )
 

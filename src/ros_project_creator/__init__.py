@@ -6,8 +6,9 @@ with Docker, VSCode, CI/CD and ROS best practices.
 
 Public API:
 
-- `RosProjectCreator`: creates a ROS project from templates, including Docker setup,
-  workspace structure, optional VSCode integration, and pre-commit support.
+- `RosProjectCreator`: creates a ROS project from templates, including workspace
+  structure, Docker setup through `robotics_dockers`, optional VSCode integration,
+  and pre-commit support.
 
 - `VscodeProjectCreator`: creates or updates the VSCode `.devcontainer` environment
   configuration for an existing project.
@@ -28,7 +29,7 @@ Usage example:
         use_pre_commit=True,
     )
 
-Note: Internal utilities used by this package (e.g. `Utilities`, `ColorizedLogger`)
+Note: Internal utilities used by this package (e.g. `Utilities`, logging helpers)
 are not part of the public API and should not be used directly.
 """
 
