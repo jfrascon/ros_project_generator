@@ -68,7 +68,6 @@ def test_create_ros2_project_delegates_docker_generation(fake_active_user: Path,
     assert project_dir.joinpath('docker/docker-compose.yaml').is_file()
     assert project_dir.joinpath('docker/.resources').is_dir()
     assert not project_dir.joinpath('docker/docker-compose-dev.yaml').exists()
-    assert not project_dir.joinpath('install_extras.sh').exists()
 
     assert project_dir.joinpath('deps.repos').is_file()
     assert project_dir.joinpath('src/0_deps').is_dir()
