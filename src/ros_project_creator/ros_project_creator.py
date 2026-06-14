@@ -20,8 +20,6 @@ from ros_project_creator.vscode_project_creator import VscodeProjectCreator
 class RosProjectCreatorException(Exception):
     """Base exception for all errors related to RosProjectCreator."""
 
-    pass
-
 
 class RosProjectCreator:
     """

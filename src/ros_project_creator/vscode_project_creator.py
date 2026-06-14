@@ -12,8 +12,6 @@ from ros_project_creator.utilities import Utilities
 class VscodeProjectCreatorException(Exception):
     """Base exception for all errors related to VscodeProjectCreator."""
 
-    pass
-
 
 class VscodeProjectCreator:
     # ==========================================================================
@@ -93,7 +91,7 @@ class VscodeProjectCreator:
             self._img_datasets_dir = self._img_user_home.joinpath('datasets')
             self._img_ssh_dir = self._img_user_home.joinpath('.ssh')
 
-            # The workspace_dir field can't be None. It does not matter if it is an absolute or
+            # The workspace_dir field cannot be None. It does not matter if it is an absolute or
             # relative path, i.e., as long as the user provides a path. It is the responsibility
             # of the user to provide the path, where the vscode files will be created.
             # If the workspace directory does not exist, it does not matter, it will be created

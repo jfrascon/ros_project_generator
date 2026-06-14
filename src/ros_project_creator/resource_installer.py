@@ -4,7 +4,7 @@ import logging
 import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, Iterable, Optional, Type
+from typing import Any, Iterable, Optional
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -16,7 +16,7 @@ class ResourceSpec:
     destination: str
     kind: str
     source: Optional[str] = None
-    context: Optional[Dict[str, Any]] = None
+    context: Optional[dict[str, Any]] = None
     executable: bool = False
 
     @classmethod
@@ -32,7 +32,7 @@ class ResourceSpec:
         cls,
         destination: str,
         source: str,
-        context: Optional[Dict[str, Any]] = None,
+        context: Optional[dict[str, Any]] = None,
         executable: bool = False,
     ) -> 'ResourceSpec':
         return cls(destination=destination, kind='template', source=source, context=context or {}, executable=executable)
@@ -45,7 +45,7 @@ class ResourceInstaller:
     resources_dir: Path
     target_dir: Path
     logger: logging.Logger
-    exception_type: Type[Exception] = Exception
+    exception_type: type[Exception] = Exception
     replace_existing: bool = False
     executable_mode: int = field(default=0o775, init=False)
     file_mode: int = field(default=0o664, init=False)
