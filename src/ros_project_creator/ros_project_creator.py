@@ -7,11 +7,11 @@ import subprocess
 from pathlib import Path
 from typing import Optional
 
-from jinja2 import Environment, FileSystemLoader
 from robotics_dockers import DockerContextConfig, generate_docker_context
 from robotics_dockers.errors import RoboticsDockersError
 
 from ros_project_creator.logging_utils import create_logger
+from ros_project_creator.resource_installer import ResourceInstaller, ResourceSpec
 from ros_project_creator.ros_variant import RosVariant
 from ros_project_creator.utilities import Utilities
 from ros_project_creator.vscode_project_creator import VscodeProjectCreator
@@ -233,69 +233,45 @@ class RosProjectCreator:
         # Path where the dependency packages will be installed.
         relative_deps_targer_dir = Path('src/0_deps')
 
-        # By using a dictionary we can sort the keys and create the files in a specific order,
-        # because the key is the file to create, relative to the project directory.
-
-        # The value is a list:
-        # If the list has one element, the key represents a directory to be 'created' somehow.
-        #    If the first element of the list is not None, then this element is a directory to be
-        #    copied in the path specified by the key.
-        #    If the first element of the list is None, then the key is a directory to be created.
-        #
-        # If the list has two elements, the key represents a file to be 'created' somehow.
-        #    If the first element of the list is not None, then this element is a file to be
-        #    copied in the path specified by the key. The second element of the list is a boolean
-        #    indicating if the file should be created with executable permissions (T) or not (F).
-        #    If the first element of the list is None, then the key is a file to be created, and the
-        #    second element of the list is a boolean indicating if the file should be created with
-        #    executable permissions (T) or not (F).
-        #
-        # If the list has three elements, the key represents a file to be 'created' with Jinja2
-        # rendering. The first element of the list is the source file path, which is a Jinja2
-        # template. The second element is a dictionary with the context for Jinja2 rendering.
-        # The third element is a boolean indicating if the file should be created with executable
-        # permissions (True) or not (False).
-
-        #  with the source file path, the context for Jinja2 rendering (if any), and the file
-        # permissions.
-        # The source file path is relative to the resources directory.
-        # The context is a dictionary with the variables to be replaced in the Jinja2 template.
-        # The third element is a boolean indicating if the file should be created with executable
-        # permissions (True) or not (False).
-
-        self._items_to_install = {
-            '.gitignore': ['git/dot_gitignore', False],
-            '.gitlab': ['git/gitlab'],
-            f'{str(relative_deps_file)}': ['deps/deps.repos', False],
-            'pyproject.toml': ['pyproject.toml', False],
-            'README.md': ['README.j2', {'project_id': self._project_id}, False],
-            'src/.clang-format': ['clang/dot_clang-format', False],
-            'src/.clang-tidy': ['clang/dot_clang-tidy', False],
-            str(relative_deps_targer_dir): [None],
-            'src/bringup/CMakeLists.txt': [
+        self._items_to_install = [
+            ResourceSpec.file('.gitignore', 'git/dot_gitignore'),
+            ResourceSpec.directory('.gitlab', 'git/gitlab'),
+            ResourceSpec.file(str(relative_deps_file), 'deps/deps.repos'),
+            ResourceSpec.file('pyproject.toml', 'pyproject.toml'),
+            ResourceSpec.template('README.md', 'README.j2', {'project_id': self._project_id}),
+            ResourceSpec.file('src/.clang-format', 'clang/dot_clang-format'),
+            ResourceSpec.file('src/.clang-tidy', 'clang/dot_clang-tidy'),
+            ResourceSpec.directory(str(relative_deps_targer_dir)),
+            ResourceSpec.template(
+                'src/bringup/CMakeLists.txt',
                 f'ros/bringup_CMakeLists_ros{self._ros_variant.get_version()}.j2',
                 {'c_version': self._ros_variant.get_c_version(), 'cpp_version': self._ros_variant.get_cpp_version()},
-                False,
-            ],
-            'src/bringup/config': [None],
-            'src/bringup/launch': [None],
-            'src/bringup/package.xml': [f'ros/bringup_package_ros{self._ros_variant.get_version()}.xml', False],
-            'src/bringup/rviz': [None],
-            'src/bringup/scripts': [None],
-            'src/simulation/CMakeLists.txt': [
+            ),
+            ResourceSpec.directory('src/bringup/config'),
+            ResourceSpec.directory('src/bringup/launch'),
+            ResourceSpec.file(
+                'src/bringup/package.xml', f'ros/bringup_package_ros{self._ros_variant.get_version()}.xml'
+            ),
+            ResourceSpec.directory('src/bringup/rviz'),
+            ResourceSpec.directory('src/bringup/scripts'),
+            ResourceSpec.template(
+                'src/simulation/CMakeLists.txt',
                 f'ros/simulation_CMakeLists_ros{self._ros_variant.get_version()}.j2',
                 {'c_version': self._ros_variant.get_c_version(), 'cpp_version': self._ros_variant.get_cpp_version()},
-                False,
-            ],
-            'src/simulation/config': [None],
-            'src/simulation/launch': [None],
-            'src/simulation/package.xml': [f'ros/simulation_package_ros{self._ros_variant.get_version()}.xml', False],
-            'src/simulation/rviz': [None],
-            'src/simulation/scripts': [None],
-        }
+            ),
+            ResourceSpec.directory('src/simulation/config'),
+            ResourceSpec.directory('src/simulation/launch'),
+            ResourceSpec.file(
+                'src/simulation/package.xml', f'ros/simulation_package_ros{self._ros_variant.get_version()}.xml'
+            ),
+            ResourceSpec.directory('src/simulation/rviz'),
+            ResourceSpec.directory('src/simulation/scripts'),
+        ]
 
         if self._use_pre_commit:
-            self._items_to_install['.pre-commit-config.yaml'] = ['git/dot_pre-commit-config.yaml', False]
+            self._items_to_install.append(
+                ResourceSpec.file('.pre-commit-config.yaml', 'git/dot_pre-commit-config.yaml')
+            )
 
     def _install_docker_files_with_robotics_dockers(self) -> None:
         docker_dir = self._project_dir.joinpath('docker')
@@ -341,100 +317,12 @@ class RosProjectCreator:
     def _install_items(self) -> None:
         self._create_items_to_install()
         self._install_docker_files_with_robotics_dockers()
-
-        for key in sorted(self._items_to_install.keys()):
-            dst_path = self._project_dir.joinpath(key).resolve()
-
-            item = self._items_to_install[key]
-
-            # If the item[0] is None, it means that the key, that can be a file or a directory, must
-            # be created, not copied from a resource.
-            src_path = None
-
-            if item[0] is not None:
-                src_path = self._resources_dir.joinpath(item[0])
-
-                if not src_path.exists():
-                    raise RosProjectCreatorException(f"Required resource '{str(src_path)}' does not exist.")
-
-            # len = 1 -> directory
-            #    src_path is None -> create an empty directory
-            #    src_path is not None -> copy the directory recursively
-            # len = 2 -> file with permissions
-            #    src_path is None -> create an empty file with permissions
-            #    src_path is not None -> copy the file with permissions
-            # len = 3 -> file with Jinja2 rendering and permissions
-            #    src_path is None -> raise an exception, not allowed
-            #    src_path is not None -> copy the file with Jinja2 rendering and permissions
-            if len(item) == 1:
-                self._logger.info(f"Creating directory '{dst_path}'")
-
-                if src_path is not None:
-                    if not src_path.is_dir():
-                        raise RosProjectCreatorException(f"Required resource '{str(src_path)}' is not a directory.")
-
-                    if not dst_path.parent.exists():
-                        dst_path.parent.mkdir(parents=True)
-
-                    shutil.copytree(src_path, dst_path, copy_function=shutil.copy2)
-                    dst_path.chmod(0o775)
-                else:
-                    dst_path.mkdir(parents=True)
-            elif len(item) == 2:
-                self._logger.info(f"Creating file '{dst_path}'")
-
-                if src_path is not None:
-                    if not src_path.is_file():
-                        raise RosProjectCreatorException(f"Required resource '{str(src_path)}' is not a file.")
-
-                    if not dst_path.parent.exists():
-                        dst_path.parent.mkdir(parents=True)
-
-                    shutil.copy2(src_path, dst_path)
-                else:
-                    dst_path.touch()
-
-                if item[1]:
-                    dst_path.chmod(0o775)
-                else:
-                    dst_path.chmod(0o664)
-            elif len(item) == 3:
-                self._logger.info(f"Creating file '{dst_path}'")
-
-                if src_path is None:
-                    raise RosProjectCreatorException(
-                        f"Relative source path can't be empty for element '{str(dst_path)}'."
-                    )
-
-                if not src_path.is_file():
-                    raise RosProjectCreatorException(f"Required resource '{str(src_path)}' is not a file.")
-
-                context = item[1]
-
-                if context is None:
-                    raise RosProjectCreatorException(
-                        f"Context for Jinja2 rendering can't be None for element '{str(dst_path)}'."
-                    )
-
-                if not isinstance(context, dict):
-                    raise RosProjectCreatorException(
-                        f"Context for Jinja2 rendering must be a dictionary for element '{str(dst_path)}'."
-                    )
-
-                if not dst_path.parent.exists():
-                    dst_path.parent.mkdir(parents=True)
-
-                jinja2_env = Environment(loader=FileSystemLoader(src_path.parent), trim_blocks=True, lstrip_blocks=True)
-                jinja2_template = jinja2_env.get_template(src_path.name)
-                rendered_text = jinja2_template.render(context)
-
-                with dst_path.open('w') as f:
-                    f.write(rendered_text)
-
-                if item[2]:
-                    dst_path.chmod(0o775)
-                else:
-                    dst_path.chmod(0o664)
+        ResourceInstaller(
+            resources_dir=self._resources_dir,
+            target_dir=self._project_dir,
+            logger=self._logger,
+            exception_type=RosProjectCreatorException,
+        ).install(self._items_to_install)
 
     def _install_pre_commit_config(self) -> str:
         cmd = ['pre-commit', 'install']

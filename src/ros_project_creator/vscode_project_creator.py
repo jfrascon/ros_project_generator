@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
 import os
-import shutil
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader
-
 from ros_project_creator.logging_utils import create_logger
+from ros_project_creator.resource_installer import ResourceInstaller, ResourceSpec
 from ros_project_creator.ros_variant import RosVariant
 from ros_project_creator.utilities import Utilities
 
@@ -150,13 +148,14 @@ class VscodeProjectCreator:
     def _create_items_to_install(self) -> None:
         service = 'devcont'
 
-        self._items_to_install = {
-            '.devcontainer/devcontainer.json': [
+        self._items_to_install = [
+            ResourceSpec.template(
+                '.devcontainer/devcontainer.json',
                 'vscode/dot_devcontainer.j2',
                 {'service': service, 'img_user': self._img_user, 'img_workspace_dir': self._img_workspace_dir},
-                False,
-            ],
-            '.devcontainer/docker-compose.yaml': [
+            ),
+            ResourceSpec.template(
+                '.devcontainer/docker-compose.yaml',
                 'vscode/docker-compose.j2',
                 {
                     'service': service,
@@ -174,136 +173,35 @@ class VscodeProjectCreator:
                     'ros_version': self._ros_variant.get_version(),
                     'ros_distro': self._ros_variant.get_distro(),
                 },
-                True,
-            ],
-            '.vscode/c_cpp_properties.json': [
+                executable=True,
+            ),
+            ResourceSpec.template(
+                '.vscode/c_cpp_properties.json',
                 'vscode/c_cpp_properties.j2',
                 {
                     'c_version': f'c{self._ros_variant.get_c_version()}',
                     'cpp_version': f'c++{self._ros_variant.get_cpp_version()}',
                     'ros_distro': self._ros_variant.get_distro(),
                 },
-                False,
-            ],
-            '.vscode/tasks.json': [
-                'vscode/tasks.j2',
-                {},
-                True,
-            ],
-            'ws.code-workspace': [
+            ),
+            ResourceSpec.template('.vscode/tasks.json', 'vscode/tasks.j2', {}, executable=True),
+            ResourceSpec.template(
+                'ws.code-workspace',
                 'vscode/ws.j2',
                 {
                     'project_id': self._project_id,
                     'ros_distro': self._ros_variant.get_distro(),
                     'python_version': self._ros_variant.get_python_version(),
                 },
-                False,
-            ],
-        }
+            ),
+        ]
 
     def _install_items(self) -> None:
         self._create_items_to_install()
-
-        for key in sorted(self._items_to_install.keys()):
-            dst_path = self._workspace_dir.joinpath(key)
-
-            item = self._items_to_install[key]
-
-            # If the item[0] is None, it means that the key, that can be a file or a directory, must
-            # be created, not copied from a resource.
-            src_path = None
-
-            if item[0] is not None:
-                src_path = self._resources_dir.joinpath(item[0])
-
-                if not src_path.exists():
-                    raise VscodeProjectCreatorException(f"Required resource '{str(src_path)}' does not exist.")
-
-            # Remove the dst_path if it exists, to ensure a clean copy/creation.
-            if dst_path.is_file():
-                dst_path.unlink()
-            elif dst_path.is_dir():
-                dst_path.rmdir()
-
-            # len = 1 -> directory
-            #    src_path is None -> create an empty directory
-            #    src_path is not None -> copy the directory recursively
-            # len = 2 -> file with permissions
-            #    src_path is None -> create an empty file with permissions
-            #    src_path is not None -> copy the file with permissions
-            # len = 3 -> file with Jinja2 rendering and permissions
-            #    src_path is None -> raise an exception, not allowed
-            #    src_path is not None -> copy the file with Jinja2 rendering and permissions
-            if len(item) == 1:
-                self._logger.info(f"Creating directory '{str(dst_path)}'")
-
-                if src_path is not None:
-                    if not src_path.is_dir():
-                        raise VscodeProjectCreatorException(f"Directory '{str(src_path)}' is required")
-
-                    # Create the parent directory if it does not exist.
-                    if not dst_path.parent.exists():
-                        dst_path.parent.mkdir(parents=True)
-
-                    shutil.copytree(src_path, dst_path, copy_function=shutil.copy2)
-                    dst_path.chmod(0o775)
-                else:
-                    # When src_path is None, the key is a directory that must be created.
-                    dst_path.mkdir(parents=True)
-            elif len(item) == 2:
-                self._logger.info(f"Creating file '{str(dst_path)}'")
-
-                if src_path is not None:
-                    if not src_path.is_file():
-                        raise VscodeProjectCreatorException(f"File '{str(src_path)}' is required.")
-
-                    # Create the parent directory if it does not exist.
-                    if not dst_path.parent.exists():
-                        dst_path.parent.mkdir(parents=True)
-
-                    shutil.copy2(src_path, dst_path)
-                else:
-                    # When src_path is None, the key is a file that must be created.
-                    dst_path.touch()
-
-                if item[1]:
-                    dst_path.chmod(0o775)
-                else:
-                    dst_path.chmod(0o664)
-            elif len(item) == 3:
-                self._logger.info(f"Creating file '{dst_path}'")
-
-                if src_path is None:
-                    raise VscodeProjectCreatorException(
-                        f"Relative source path can't be empty for element '{str(dst_path)}'."
-                    )
-
-                if not src_path.is_file():
-                    raise VscodeProjectCreatorException(f"Template '{str(src_path)}' is required.")
-
-                context = item[1]
-
-                if context is None:
-                    raise VscodeProjectCreatorException(
-                        f"Context for Jinja2 rendering can't be None for element '{str(dst_path)}'."
-                    )
-
-                if not isinstance(context, dict):
-                    raise VscodeProjectCreatorException(
-                        f"Context for Jinja2 rendering must be a dictionary for element '{str(dst_path)}'."
-                    )
-
-                if not dst_path.parent.exists():
-                    dst_path.parent.mkdir(parents=True)
-
-                jinja2_env = Environment(loader=FileSystemLoader(src_path.parent), trim_blocks=True, lstrip_blocks=True)
-                jinja2_template = jinja2_env.get_template(src_path.name)
-                rendered_text = jinja2_template.render(context)
-
-                with dst_path.open('w') as f:
-                    f.write(rendered_text)
-
-                if item[2]:
-                    dst_path.chmod(0o775)
-                else:
-                    dst_path.chmod(0o664)
+        ResourceInstaller(
+            resources_dir=self._resources_dir,
+            target_dir=self._workspace_dir,
+            logger=self._logger,
+            exception_type=VscodeProjectCreatorException,
+            replace_existing=True,
+        ).install(self._items_to_install)
