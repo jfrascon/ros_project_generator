@@ -28,7 +28,7 @@ class Utilities:
             Exception: If the item is empty.
         """
         if not item:  # Covers empty strings, lists, dicts, sets, None, etc.
-            raise Exception(error_msg)
+            raise ValueError(error_msg)
 
     @staticmethod
     def assert_dir_existence(path: Path, error_msg: str) -> None:
@@ -43,7 +43,7 @@ class Utilities:
             Exception: If the path does not exist or is not a directory.
         """
         if not path.exists() or not path.is_dir():
-            raise Exception(error_msg)
+            raise NotADirectoryError(error_msg)
 
     @staticmethod
     def assert_file_existence(file: Path, error_msg: str) -> None:
@@ -58,7 +58,7 @@ class Utilities:
             Exception: If the file does not exist or is not a file.
         """
         if not file.exists() or not file.is_file():
-            raise Exception(error_msg)
+            raise FileNotFoundError(error_msg)
 
     @staticmethod
     def clean_str(string: Optional[str]) -> Optional[str]:
