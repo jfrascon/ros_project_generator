@@ -58,7 +58,7 @@ def main():
 
         parser.add_argument('--use-host-nvidia-driver', action='store_true', help="Use host's NVIDIA driver")
 
-        parser.add_argument('--no-vscode', action='store_true', help='Do not create VSCode project')
+        parser.add_argument('--no-vscode', action='store_true', help='Do not create VS Code project')
 
         parser.add_argument('--no-pre-commit', action='store_true', help='Do not use pre-commit hooks')
 

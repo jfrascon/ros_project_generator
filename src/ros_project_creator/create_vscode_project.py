@@ -28,7 +28,7 @@ def main():
         )
 
         parser = argparse.ArgumentParser(
-            description='Creates a new VSCode project based on templates',
+            description='Creates a new VS Code project based on templates',
             allow_abbrev=False,  # Disable prefix matching
             add_help=False,  # Add custom help message
             formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=35),
@@ -38,10 +38,10 @@ def main():
         parser.add_argument('project_id', type=str, help="Short project identifier (e.g. 'robproj')")
         parser.add_argument('ros_distro', type=str, help=f'ROS distro to use: {supported_ros_distros}')
         parser.add_argument(
-            'img_id', type=str, help='ID of the Docker image that VSCode will use to create a container'
+            'img_id', type=str, help='ID of the Docker image that VS Code will use to create a container'
         )
         parser.add_argument('img_user', type=str, help='User to use inside the container')
-        parser.add_argument('workspace_dir', type=str, help='Path to the VSCode workspace on host')
+        parser.add_argument('workspace_dir', type=str, help='Path to the VS Code workspace on host')
         parser.add_argument('img_workspace_dir', type=str, help='Absolute path to the workspace in the image')
 
         # Optional arguments
@@ -55,14 +55,23 @@ def main():
         parser.add_argument('--use-host-nvidia-driver', action='store_true', help="Use host's NVIDIA driver")
 
         parser.add_argument(
+            '--no-console-log',
             '--no_console_log',
+            dest='no_console_log',
             action='store_true',
             help='Disable logging to console. Console logging is enabled by default',
             default=False,
         )
 
-        parser.add_argument('--log_file', type=str, help='File to log output', default='')
-        parser.add_argument('--log_level', type=str, help='Logging level (Default is DEBUG)', default='DEBUG')
+        parser.add_argument('--log-file', '--log_file', dest='log_file', type=str, help='File to log output', default='')
+        parser.add_argument(
+            '--log-level',
+            '--log_level',
+            dest='log_level',
+            type=str,
+            help='Logging level (Default is DEBUG)',
+            default='DEBUG',
+        )
 
         parser.add_argument(
             '-h', '--help', action='help', default=argparse.SUPPRESS, help='Show this help message and exit'

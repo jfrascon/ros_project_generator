@@ -2,15 +2,15 @@
 ros_project_creator
 
 This package provides tools for creating and configuring ROS-based development projects
-with Docker, VSCode, CI/CD and ROS best practices.
+with Docker, VS Code, CI/CD and ROS best practices.
 
 Public API:
 
 - `RosProjectCreator`: creates a ROS project from templates, including workspace
-  structure, Docker setup through `robotics_dockers`, optional VSCode integration,
+  structure, Docker setup through `robotics_dockers`, optional VS Code integration,
   and pre-commit support.
 
-- `VscodeProjectCreator`: creates or updates the VSCode `.devcontainer` environment
+- `VscodeProjectCreator`: creates or updates the VS Code `.devcontainer` environment
   configuration for an existing project.
 
 Usage example:

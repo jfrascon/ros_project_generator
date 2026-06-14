@@ -32,10 +32,10 @@ class VscodeProjectCreator:
         log_file: str = '',
         log_level: str = 'DEBUG',
     ):
-        """Creates a new VSCode project based on templates.
+        """Creates a new VS Code project based on templates.
         Args:
             ros_distro (str): ROS distro to use (e.g. 'humble')
-            img_id (str): ID of the Docker image that VSCode will use to create a container
+            img_id (str): ID of the Docker image that VS Code will use to create a container
             img_user (str): User to use inside the container
             img_user_home (Path): Home directory of the user inside the container (e.g. '/home/user')
             workspace_dir (Path): Path to the project directory (e.g. '/path/to/robproj')
