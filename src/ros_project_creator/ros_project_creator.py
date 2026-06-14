@@ -128,8 +128,10 @@ class RosProjectCreator:
 
             self._base_img = Utilities.clean_str(base_img)
             Utilities.assert_non_empty(self._base_img, 'Base image must be a non-empty string')
+            base_img_name = str(self._base_img)
+            self._base_img = base_img_name
 
-            if not Utilities.is_valid_docker_image_name(self._base_img):  # type: ignore
+            if not Utilities.is_valid_docker_image_name(base_img_name):
                 raise RosProjectCreatorException(
                     f"Base image '{self._base_img}' is not a valid Docker image name. "
                     'Valid names must start with a lowercase letter or number, '
@@ -138,8 +140,10 @@ class RosProjectCreator:
 
             self._image_main_user = Utilities.clean_str(image_main_user)
             Utilities.assert_non_empty(self._image_main_user, 'Image user must be a non-empty string')
+            image_main_user_name = str(self._image_main_user)
+            self._image_main_user = image_main_user_name
 
-            if ' ' in self._image_main_user:  # type: ignore
+            if ' ' in image_main_user_name:
                 raise RosProjectCreatorException('Image user must not contain spaces')
 
             if self._image_main_user == 'root':

@@ -80,7 +80,9 @@ class Utilities:
         Format:
             [HOST[:PORT_NUMBER]/]PATH[:TAG]
 
-        See: https://docs.docker.com/get-started/docker-concepts/building-images/build-tag-and-publish-an-image/#tagging-images
+        See:
+            https://docs.docker.com/get-started/docker-concepts/building-images/build-tag-and-publish-an-image/
+            #tagging-images
         """
 
         # Optional registry prefix: host (lower‑case letters, digits, dots, dashes)
