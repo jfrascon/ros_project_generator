@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 import re
-import shutil
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Optional
 
 import yaml
-from jinja2 import Environment
 
 
 class Utilities:
@@ -75,38 +73,6 @@ class Utilities:
         return string.strip() if string is not None else None
 
     @staticmethod
-    def copy_file(src: Path, dst: Path, mode: int, log: Optional[Callable[[str], None]] = None) -> None:
-        if log:
-            log(f"Creating file '{dst.resolve()}'...")
-
-        shutil.copy(src, dst)
-        dst.chmod(mode)
-
-    @staticmethod
-    def copy_dir(src: Path, dst: Path, mode: int, log: Optional[Callable[[str], None]] = None) -> None:
-        if log:
-            log(f"Creating directory '{dst.resolve()}'...")
-
-        shutil.copytree(src, dst, dirs_exist_ok=True)
-        dst.chmod(mode)
-
-    @staticmethod
-    def install_template(
-        jinja_env: Environment,
-        template: Path,
-        context: dict,
-        output_file: Path,
-        mode: int,
-        log: Optional[Callable[[str], None]] = None,
-    ) -> None:
-        if log:
-            log(f"Creating file '{output_file.resolve()}'...")
-
-        rendered = Utilities.render_template(jinja_env, template, context)
-        Utilities.write_file(rendered, output_file)
-        output_file.chmod(mode)
-
-    @staticmethod
     def is_valid_docker_image_name(name: str) -> bool:
         """
         Validate a Docker image name according to Docker's official naming rules.
@@ -150,61 +116,3 @@ class Utilities:
                 return content if isinstance(content, dict) else {}
         except (FileNotFoundError, yaml.YAMLError):
             return {}
-
-    @staticmethod
-    def mkdir(dir: Path, mode: int, log: Optional[Callable[[str], None]] = None) -> None:
-        if log:
-            log(f"Creating directory '{dir.resolve()}'...")
-
-        dir.mkdir(parents=True, exist_ok=True)
-        dir.chmod(mode)
-
-    @staticmethod
-    def read_file(file: Path) -> str:
-        """
-        Reads the content of a file and returns it as a string.
-
-        Args:
-            file (Path): The path to the file to be read.
-
-        Returns:
-            str: The content of the file.
-
-        Raises:
-            Exception: If the file does not exist or is a directory.
-        """
-        if not file.exists():
-            raise Exception(f"File '{file}' does not exist")
-        if file.is_dir():
-            raise Exception(f"Path '{file}' is a directory, not a file")
-
-        with file.open('r') as f:
-            text = f.read()
-
-        return text
-
-    @staticmethod
-    def render_template(jinja_env: Environment, template: Path, context: dict) -> str:
-        jinja_template = jinja_env.get_template(template.name)
-        return jinja_template.render(context)
-
-    @staticmethod
-    def write_file(text: str, file: Path) -> None:
-        """
-        Writes the given text to a specified file.
-
-        Args:
-            text (str): The text content to be written to the file.
-            file (Path): The path to the file where the text will be written.
-
-        Returns:
-            None
-
-        Raises:
-            Exception: If the file already exists.
-        """
-        if file.exists():
-            raise Exception(f"File '{file}' already exists")
-
-        with file.open('w') as f:
-            f.write(text)
