@@ -268,7 +268,6 @@ class RosProjectCreator:
             '.gitignore': ['git/dot_gitignore', False],
             '.gitlab': ['git/gitlab'],
             f'{str(relative_deps_file)}': ['deps/deps.repos', False],
-            'install_extras.sh': ['deps/install_extras.sh', True],
             'pyproject.toml': ['pyproject.toml', False],
             'README.md': ['README.j2', {'project_id': self._project_id}, False],
             'src/.clang-format': ['clang/dot_clang-format', False],

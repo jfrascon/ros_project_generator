@@ -134,11 +134,6 @@ class VscodeProjectCreator:
                 self._use_git = False
                 self._gitconfig_file = None
 
-            self._build_release_cmd = 'rosbuild.sh'
-            self._build_debug_cmd = 'rosbuild.sh --mixin debug'
-            self._build_relwithdebinfo_cmd = 'rosbuild.sh --mixin rel-with-deb-info'
-            self._clean_cmd = 'colcon clean workspace -y'
-
             self._install_items()
         # trim_block removes the first newline after a block (e.g., after {% endif %}).
         # lstrip_blocks strips leading whitespace from the start of a block line.
@@ -193,12 +188,7 @@ class VscodeProjectCreator:
             ],
             '.vscode/tasks.json': [
                 'vscode/tasks.j2',
-                {
-                    'build_command_for_release': self._build_release_cmd,
-                    'build_command_for_debug': self._build_debug_cmd,
-                    'build_command_for_relwithdebinfo': self._build_relwithdebinfo_cmd,
-                    'clean_command': self._clean_cmd,
-                },
+                {},
                 True,
             ],
             'ws.code-workspace': [

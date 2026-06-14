@@ -4,16 +4,19 @@
         {
             "name": "dev",
             "intelliSenseMode": "linux-gcc-x64", // Use gcc-compatible IntelliSense (or "linux-clang-x64" if preferred).
-            "compilerPath": "/usr/bin/g++",      // Used only when compileCommands is missing.
+            "compilerPath": "/usr/bin/g++", // Used only when compileCommands is missing.
             "cStandard": "{{ c_version }}",
             "cppStandard": "{{ cpp_version }}",
-
             // compileCommands provides exact compiler flags for each source file,
             // including -I, -D, -std=..., and any other arguments used during the build.
             // This is the most accurate way to configure IntelliSense.
-            // When this file is present, includePath, defines, and other fields are ignored.
+            // When this file is present, includePath, defines, and other fields are ignored
+            // unless mergeConfigurations is true (see below).
             "compileCommands": "${workspaceFolder}/build/compile_commands.json",
-
+            // When true, IntelliSense merges compile_commands.json with the includePath fallback
+            // below, instead of ignoring includePath when compile_commands.json is present.
+            // This ensures headers are resolved even for files not listed in compile_commands.json.
+            "mergeConfigurations": true,
             // includePath is only used if compileCommands.json is missing (e.g., after cleaning build/).
             // It's a fallback for IntelliSense to function even when the build system is not initialized.
             "includePath": [
@@ -23,7 +26,6 @@
                 "/usr/include/**",
                 "/usr/local/include/**"
             ],
-
             // browse.path is used by the tag parser for symbol indexing ("Go to Symbol in Workspace").
             // It does not affect IntelliSense or diagnostics, but improves navigation.
             // These paths are indexed in the background.
@@ -38,12 +40,22 @@
                 "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
                 "limitSymbolsToIncludedHeaders": true
             },
-
             // Optional global -D macros (unused here).
-            "defines": []
-
+            "defines": [],
+            // Compiler flags used by IntelliSense as a fallback before compile_commands.json exists.
+            // Once compile_commands.json is present, these are ignored in favour of the per-file
+            // flags recorded there. These match the default CMAKE_CXX_FLAGS injected by rosbuild.
+            "compilerArgs": [
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-Wnon-virtual-dtor",
+                "-Woverloaded-virtual",
+                "-Wnull-dereference",
+                "-Wunused-parameter"
+            ]
             // "configurationProvider" intentionally omitted because the project uses external build wrapper,
-            // rosbuild.sh, which generate compile_commands.json independently.
+            // rosbuild, which generates compile_commands.json independently.
         }
     ]
 }

@@ -4,12 +4,11 @@
       "path": ".",
       "name": "{{ project_id }}"
     },
-    {
-        "path": "src/0_deps"
-    }
   ],
-"settings": {
+  "settings": {
     "editor.autoIndent": "full",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit"
     },
@@ -22,79 +21,90 @@
     "editor.rulers": [
       120
     ],
-    "editor.semanticHighlighting.enabled": true,
     "files.associations": {
-        "*.config": "properties",
-        "*.json": "jsonc",
-        "*.launch": "xml",
-        "*.sdf": "xml",
-        "*.urdf": "xml",
-        "*.xacro": "xml",
-        "*.world": "xml"
+      "*.config": "properties",
+      "*.json": "jsonc",
+      "*.launch": "xml",
+      "*.sdf": "xml",
+      "*.urdf": "xml",
+      "*.xacro": "xml",
+      "*.world": "xml",
+      "*.j2": "jinja",
+      "*.jinja": "jinja"
     },
     "files.autoSave": "onFocusChange",
-    "files.autoSaveDelay": 30000,
     "files.exclude": {
-        "build/": true,
-        "install/": true,
-        "devel/": true,
-        "log/": true,
-        "logs/": true,
-        "/.git": true,
-        "/.svn": true,
-        "/.hg": true,
-        "/.DS_Store": true,
-        "src/0_deps/": true,
-        "**/__pycache__": true,
-        "**/.pytest_cache": true,
-        "**/.mypy_cache": true,
-        "**/.ruff_cache": true,
-        "**/.cache": true,
-        "**/.idea": true,
-        "**/CMakeFiles": true,
-        "**/CMakeCache.txt": true,
-        "**/Thumbs.db": true,
+      "/.git": true,
+      "/.svn": true,
+      "/.hg": true,
+      "/.DS_Store": true,
+      "src/0_deps/": true,
+      "**/__pycache__": true,
+      "**/.pytest_cache": true,
+      "**/.mypy_cache": true,
+      "**/.ruff_cache": true,
+      "**/.cache": true,
+      "**/.idea": true,
+      "**/CMakeFiles": true,
+      "**/CMakeCache.txt": true,
+      "**/Thumbs.db": true,
     },
     "files.watcherExclude": {
-        "build/": true,
-        "install/": true,
-        "devel/": true,
-        "log/": true,
-        "logs/": true,
-        "**/.git/**": true,
-        "src/0_deps/**": true,
-        "**/__pycache__/**": true,
-        "**/.pytest_cache/**": true,
-        "**/.mypy_cache/**": true,
-        "**/.ruff_cache/**": true,
-        "**/.cache/**": true,
-        "**/.idea/**": true,
-        "**/CMakeFiles/**": true,
-        "**/CMakeCache.txt": true
+      "build/": true,
+      "install/": true,
+      "devel/": true,
+      "log/": true,
+      "logs/": true,
+      "**/.git/**": true,
+      "src/0_deps/**": true,
+      "**/__pycache__/**": true,
+      "**/.pytest_cache/**": true,
+      "**/.mypy_cache/**": true,
+      "**/.ruff_cache/**": true,
+      "**/.cache/**": true,
+      "**/.idea/**": true,
+      "**/CMakeFiles/**": true,
+      "**/CMakeCache.txt": true
     },
     "files.saveConflictResolution": "overwriteFileOnDisk",
     "files.trimTrailingWhitespace": true,
     "search.exclude": {
-        "/node_modules": true,
-        "/bower_components": true,
-        "src/0_deps/": true,
-        "**/.git/**": true,
-        "/*.code-search": true,
-        "**/__pycache__/**": true,
-        "**/.pytest_cache/**": true,
-        "**/.mypy_cache/**": true,
-        "**/.ruff_cache/**": true,
-        "**/.cache/**": true,
-        "**/.idea/**": true,
-        "**/CMakeFiles/**": true,
-        "**/CMakeCache.txt": true
+      "/node_modules": true,
+      "/bower_components": true,
+      "src/0_deps/": true,
+      "**/.git/**": true,
+      "/*.code-search": true,
+      "**/__pycache__/**": true,
+      "**/.pytest_cache/**": true,
+      "**/.mypy_cache/**": true,
+      "**/.ruff_cache/**": true,
+      "**/.cache/**": true,
+      "**/.idea/**": true,
+      "**/CMakeFiles/**": true,
+      "**/CMakeCache.txt": true
     },
+    // ==========================================================================
+    // SHELL SETTINGS
+    // NOTE: foxundermoon.shell-format requires shfmt: sudo apt install shfmt
+    // NOTE: timonwong.shellcheck requires shellcheck: sudo apt install shellcheck
+    // ==========================================================================
+    "[shellscript]": {
+      "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    // Use 4-space indentation in shell scripts (shfmt -i 4).
+    "shellformat.flag": "-i 4",
+    // Run shellcheck on save, not on every keystroke.
+    "shellcheck.run": "onSave",
     // ==========================================================================
     // CPP SETTINGS
     // ==========================================================================
-    "C_Cpp.enhancedColorization": "enabled",
     "C_Cpp.intelliSenseEngine": "default",
-    "C_Cpp.loggingLevel": "Debug",
+    "C_Cpp.loggingLevel": "Warning",
+    // Show squiggles in c_cpp_properties.json when configured paths do not exist.
+    "C_Cpp.default.enableConfigurationSquiggles": true,
+    "[c]": {
+      "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
     "[cpp]": {
       "editor.defaultFormatter": "ms-vscode.cpptools"
     },
@@ -113,47 +123,123 @@
       "**/.git": true
     },
     // ==========================================================================
+    // CMAKE SETTINGS
+    // ==========================================================================
+    "[cmake]": {
+      "editor.defaultFormatter": "cheshirekow.cmake-format"
+    },
+    // ==========================================================================
     // PYTHON SETTINGS
     // ==========================================================================
-    "python.autoComplete.extraPaths": [
-      "/opt/ros/{{ ros_distro }}/lib/python{{ python_version }}/site-packages",
-      "${workspaceFolder}/src"
-    ],
     "python.analysis.autoFormatStrings": true,
+    "python.analysis.diagnosticMode": "workspace",
     "python.analysis.extraPaths": [
-      "/opt/ros/{{ ros_distro }}/lib/python{{ python_version }}/site-packages",
-      "${workspaceFolder}/src"
+      "/opt/ros/{{ ros_distro }}/lib/python{{ python_version }}/site-packages"
     ],
     "python.analysis.typeCheckingMode": "standard",
-    "python.languageServer": "Pylance",
+    "python.analysis.useLibraryCodeForTypes": true,
     "[python]": {
-        "editor.defaultFormatter": "charliermarsh.ruff",
-        "editor.formatOnSave": true,
-        "editor.formatOnSaveMode": "modificationsIfAvailable",
-        "editor.codeActionsOnSave": {
-            "source.fixAll.ruff": "always",
-            "source.organizeImports": "never",
-            "source.organizeImports.ruff": "always"
-        }
+      "editor.defaultFormatter": "charliermarsh.ruff",
+      "editor.formatOnSave": true,
+      "editor.formatOnSaveMode": "modificationsIfAvailable",
+      "editor.codeActionsOnSave": {
+        "source.fixAll.ruff": "always",
+        "source.organizeImports": "never",
+        "source.organizeImports.ruff": "always"
+      }
     },
+    // ==========================================================================
+    // CMAKE TOOLS
+    // ==========================================================================
+    // Disable auto-configure: in ROS 2 the build is driven by colcon, not cmake directly.
+    "cmake.configureOnOpen": false,
+    "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}",
+    "cmake.generator": "Ninja",
+    // ==========================================================================
+    // CODE SPELL CHECKER
+    // ==========================================================================
+    "cSpell.language": "en,es",
+    "cSpell.ignorePaths": [
+      "build/",
+      "install/",
+      "log/",
+      "src/0_deps/"
+    ],
+    // ==========================================================================
+    // DOX DOC GEN
+    // ==========================================================================
+    "doxdocgen.generic.authorName": "jfrascon",
+    "doxdocgen.generic.authorEmail": "jfrascon@gmail.com",
+    "doxdocgen.file.fileOrder": [
+      "file",
+      "brief",
+      "author",
+      "date"
+    ],
+    "doxdocgen.generic.order": [
+      "brief",
+      "param",
+      "return"
+    ],
+    // ==========================================================================
+    // ERROR LENS
+    // ==========================================================================
+    // Show inline diagnostics only for errors and warnings; hints are too noisy.
+    "errorLens.enabledDiagnosticLevels": [
+      "error",
+      "warning"
+    ],
+    // Delay decoration updates to avoid flickering while typing.
+    "errorLens.delay": 500,
+    // ==========================================================================
+    // GIT
+    // ==========================================================================
+    "git.autofetch": true,
+    "git.ignoreLimitWarning": true,
     // ==========================================================================
     // ROS
     // ==========================================================================
-    "ros.distro": "{{ ros_distro }}"
+    "ROS2.distro": "{{ ros_distro }}",
     // ==========================================================================
     // RUFF
     // ==========================================================================
     //"ruff.configuration": leave it empty to use the pyproject.toml file of each repo.
     "ruff.importStrategy": "fromEnvironment",
     "ruff.nativeServer": "on",
+    "ruff.organizeImports": true,
     // ==========================================================================
-    // XML
+    // YAML SETTINGS
+    // ==========================================================================
+    "[yaml]": {
+      "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    // Match the column ruler at 120.
+    "yaml.format.printWidth": 120,
+    // ==========================================================================
+    // MARKDOWN SETTINGS
+    // ==========================================================================
+    "[markdown]": {
+      "editor.defaultFormatter": "DavidAnson.vscode-markdownlint",
+      "editor.formatOnSave": true
+    },
+    // ==========================================================================
+    // TOML SETTINGS
+    // ==========================================================================
+    "[toml]": {
+      "editor.defaultFormatter": "tamasfe.even-better-toml"
+    },
+    // ==========================================================================
+    // XML SETTINGS
     // ==========================================================================
     "[xml]": {
-      "editor.defaultFormatter": "redhat.vscode-xml",
-      "editor.formatOnSave": false,
-      "editor.formatOnPaste": false,
-      "editor.formatOnType": false
-    }
+      "editor.defaultFormatter": "redhat.vscode-xml"
+    },
+    "xml.format.maxLineWidth": 0,
+    "xml.format.splitAttributes": "preserve",
+    "xml.format.closingBracketNewLine": false,
+    "xml.format.spaceBeforeEmptyCloseTag": false,
+    "python.autoComplete.extraPaths": [
+      "/opt/ros/{{ ros_distro }}/lib/python{{ python_version }}/site-packages"
+    ],
   }
 }
