@@ -67,7 +67,7 @@ class VscodeProjectCreator:
             self._project_id = Utilities.clean_str(project_id)
             Utilities.assert_non_empty(project_id, 'Project id must be a non-empty string')
 
-            # Get the the ros_variant (ros_distro, ros_version, cpp_version, c_version) associated to the passed
+            # Get the ros_variant (ros_distro, ros_version, cpp_version, c_version) associated to the passed
             # ros_distro.
             ros_variant_yaml_file = self._resources_dir.joinpath('ros/ros_variants.yaml')
             self._ros_variant = RosVariant(ros_distro, ros_variant_yaml_file)
@@ -83,10 +83,10 @@ class VscodeProjectCreator:
             # The img_datasets_dir and the img_ssh_dir will be created from the img_user_home path,
             # so we need the img_user_home to be an absolute path.
             if not img_user_home:
-                raise Exception('Image user home path must be provided')
+                raise VscodeProjectCreatorException('Image user home path must be provided')
 
             if not img_user_home.is_absolute():
-                raise Exception('Image user home path must be an absolute path')
+                raise VscodeProjectCreatorException('Image user home path must be an absolute path')
 
             self._img_user_home = img_user_home
 
@@ -96,18 +96,18 @@ class VscodeProjectCreator:
             # The workspace_dir field can't be None. It does not matter if it is an absolute or
             # relative path, i.e., as long as the user provides a path. It is the responsibility
             # of the user to provide the path, where the vscode files will be created.
-            # If the workspace directory does not exist, it does not matter, it will be creater
+            # If the workspace directory does not exist, it does not matter, it will be created
             # later.
             if not workspace_dir:
-                raise Exception('Image workspace path must be provided')
+                raise VscodeProjectCreatorException('Workspace path must be provided')
 
             self._workspace_dir = workspace_dir.expanduser().resolve()
 
             if not img_workspace_dir:
-                raise Exception('Image workspace path must be provided')
+                raise VscodeProjectCreatorException('Image workspace path must be provided')
 
             if not img_workspace_dir.is_absolute():
-                raise Exception('Image workspace path must be an absolute path')
+                raise VscodeProjectCreatorException('Image workspace path must be an absolute path')
 
             self._img_workspace_dir = img_workspace_dir
             self._use_host_nvidia_driver = use_host_nvidia_driver

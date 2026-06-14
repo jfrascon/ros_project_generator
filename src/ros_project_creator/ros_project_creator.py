@@ -114,8 +114,7 @@ class RosProjectCreator:
 
             # If the project dir already exist, do nothing, print message and exit.
             # The user must decide how to proceed manually (deleting the existing project dir and re-create the project,
-            # create the project in a differente directory, etc.)
-            # etc.)
+            # create the project in a different directory, etc.)
             if self._project_dir.exists():
                 raise RosProjectCreatorException(
                     f"Project dir '{str(self._project_dir)}' already exists. "
@@ -168,14 +167,14 @@ class RosProjectCreator:
             self._assert_robotics_dockers_supported_user()
 
             # Check if the git binary exists in the system.
-            self._check_git_binary_existance()
+            self._check_git_binary_existence()
 
             # If the pre-commit argument is True, check if the pre-commit binary exists in the
             # system.
             self._use_pre_commit = use_pre_commit
 
             if self._use_pre_commit:
-                self._check_pre_commit_binary_existance()
+                self._check_pre_commit_binary_existence()
 
             self._logger.info(f"Creating project '{self._project_id}'")
 
@@ -197,7 +196,7 @@ class RosProjectCreator:
                     log_level,
                 )
 
-            self._logger.info(self._initializate_git_repo())
+            self._logger.info(self._initialize_git_repo())
 
             if use_pre_commit:
                 self._logger.info(self._install_pre_commit_config())
@@ -205,12 +204,12 @@ class RosProjectCreator:
             self._logger.error(f'{e}')
             raise
 
-    def _check_git_binary_existance(self) -> None:
+    def _check_git_binary_existence(self) -> None:
         # Check git binary existence.
         if not shutil.which('git'):
             raise RosProjectCreatorException('Git binary not found in the system')
 
-    def _check_pre_commit_binary_existance(self) -> None:
+    def _check_pre_commit_binary_existence(self) -> None:
         # Check pre-commit binary existence.
         if not shutil.which('pre-commit'):
             raise RosProjectCreatorException('pre-commit binary not found in the system')
@@ -231,7 +230,7 @@ class RosProjectCreator:
         relative_deps_file = Path('deps.repos')
 
         # Path where the dependency packages will be installed.
-        relative_deps_targer_dir = Path('src/0_deps')
+        relative_deps_target_dir = Path('src/0_deps')
 
         self._items_to_install = [
             ResourceSpec.file('.gitignore', 'git/dot_gitignore'),
@@ -241,7 +240,7 @@ class RosProjectCreator:
             ResourceSpec.template('README.md', 'README.j2', {'project_id': self._project_id}),
             ResourceSpec.file('src/.clang-format', 'clang/dot_clang-format'),
             ResourceSpec.file('src/.clang-tidy', 'clang/dot_clang-tidy'),
-            ResourceSpec.directory(str(relative_deps_targer_dir)),
+            ResourceSpec.directory(str(relative_deps_target_dir)),
             ResourceSpec.template(
                 'src/bringup/CMakeLists.txt',
                 f'ros/bringup_CMakeLists_ros{self._ros_variant.get_version()}.j2',
@@ -299,7 +298,7 @@ class RosProjectCreator:
         if generated_compose_file.exists():
             generated_compose_file.replace(expected_compose_file)
 
-    def _initializate_git_repo(self) -> str:
+    def _initialize_git_repo(self) -> str:
         cmd = ['git', 'init', '--initial-branch=main']
         cwd = self._project_dir
         self._logger.info(f"Executing command '{' '.join(cmd)}' in '{cwd}'")

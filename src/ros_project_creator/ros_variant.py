@@ -25,7 +25,7 @@ class RosVariant:
             supported_ros_distros = ", ".join(
                 f"{ros_distro} (ros{data['ros_version']})" for ros_distro, data in ros_variants.items()
             )
-            raise Exception(f"Found ROS distro '{ros_distro}'. Allowed ROS distros: {supported_ros_distros}")
+            raise ValueError(f"Unsupported ROS distro '{ros_distro}'. Allowed ROS distros: {supported_ros_distros}")
 
     def get_c_version(self) -> str:
         """

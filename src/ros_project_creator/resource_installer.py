@@ -14,17 +14,18 @@ class ResourceSpec:
     """Describe one project resource that must be created from the package resources."""
 
     destination: str
+    kind: str
     source: Optional[str] = None
     context: Optional[Dict[str, Any]] = None
     executable: bool = False
 
     @classmethod
     def directory(cls, destination: str, source: Optional[str] = None) -> 'ResourceSpec':
-        return cls(destination=destination, source=source)
+        return cls(destination=destination, kind='directory', source=source)
 
     @classmethod
     def file(cls, destination: str, source: str, executable: bool = False) -> 'ResourceSpec':
-        return cls(destination=destination, source=source, executable=executable)
+        return cls(destination=destination, kind='file', source=source, executable=executable)
 
     @classmethod
     def template(
@@ -34,7 +35,7 @@ class ResourceSpec:
         context: Optional[Dict[str, Any]] = None,
         executable: bool = False,
     ) -> 'ResourceSpec':
-        return cls(destination=destination, source=source, context=context or {}, executable=executable)
+        return cls(destination=destination, kind='template', source=source, context=context or {}, executable=executable)
 
 
 @dataclass(frozen=True)
@@ -64,12 +65,14 @@ class ResourceInstaller:
         if self.replace_existing:
             self._remove_existing_destination(dst_path)
 
-        if resource.context is not None:
-            self._install_template(resource, src_path, dst_path)
-        elif src_path is None or src_path.is_dir():
+        if resource.kind == 'directory':
             self._install_directory(src_path, dst_path)
-        else:
+        elif resource.kind == 'file':
             self._install_file(resource, src_path, dst_path)
+        elif resource.kind == 'template':
+            self._install_template(resource, src_path, dst_path)
+        else:
+            raise self.exception_type(f"Unsupported resource kind '{resource.kind}' for '{resource.destination}'.")
 
     def _install_directory(self, src_path: Optional[Path], dst_path: Path) -> None:
         self.logger.info(f"Creating directory '{dst_path}'")
@@ -85,8 +88,11 @@ class ResourceInstaller:
         shutil.copytree(src_path, dst_path, copy_function=shutil.copy2)
         dst_path.chmod(self.executable_mode)
 
-    def _install_file(self, resource: ResourceSpec, src_path: Path, dst_path: Path) -> None:
+    def _install_file(self, resource: ResourceSpec, src_path: Optional[Path], dst_path: Path) -> None:
         self.logger.info(f"Creating file '{dst_path}'")
+
+        if src_path is None:
+            raise self.exception_type(f"File source is required for resource '{resource.destination}'.")
 
         if not src_path.is_file():
             raise self.exception_type(f"Required resource '{src_path}' is not a file.")

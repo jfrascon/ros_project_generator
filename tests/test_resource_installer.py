@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 
+import pytest
+
 from ros_project_creator.resource_installer import ResourceInstaller, ResourceSpec
 
 
@@ -48,3 +50,20 @@ def test_resource_installer_can_replace_existing_files(tmp_path) -> None:
     ).install([ResourceSpec.template('existing.txt', 'template.j2', {'value': 'content'})])
 
     assert target_dir.joinpath('existing.txt').read_text() == 'new=content'
+
+
+def test_resource_installer_rejects_file_resource_with_directory_source(tmp_path) -> None:
+    resources_dir = tmp_path / 'resources'
+    target_dir = tmp_path / 'target'
+    resources_dir.mkdir()
+    target_dir.mkdir()
+    resources_dir.joinpath('directory_source').mkdir()
+
+    installer = ResourceInstaller(
+        resources_dir=resources_dir,
+        target_dir=target_dir,
+        logger=logging.getLogger('test_resource_installer_invalid_file_source'),
+    )
+
+    with pytest.raises(Exception, match='is not a file'):
+        installer.install([ResourceSpec.file('copied/path', 'directory_source')])
