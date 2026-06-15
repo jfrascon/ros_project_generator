@@ -3,12 +3,12 @@ from types import SimpleNamespace
 
 import pytest
 
-import ros_project_creator.cli as cli_module
-import ros_project_creator.create_ros_project as create_ros_project_module
-import ros_project_creator.create_vscode_project as create_vscode_project_module
-import ros_project_creator.ros_project_creator as ros_project_creator_module
-from ros_project_creator.ros_project_creator import RosProjectCreator, RosProjectCreatorException
-from ros_project_creator.vscode_project_creator import VscodeProjectCreator, VscodeProjectCreatorException
+import ros_project_generator.cli as cli_module
+import ros_project_generator.create_ros_project as create_ros_project_module
+import ros_project_generator.create_vscode_project as create_vscode_project_module
+import ros_project_generator.ros_project_generator as ros_project_generator_module
+from ros_project_generator.ros_project_generator import RosProjectCreator, RosProjectCreatorException
+from ros_project_generator.vscode_project_creator import VscodeProjectCreator, VscodeProjectCreatorException
 
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def fake_active_user(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Path:
     monkeypatch.setenv('USER', 'developer')
     monkeypatch.delenv('SUDO_USER', raising=False)
     monkeypatch.setattr(
-        ros_project_creator_module.pwd,
+        ros_project_generator_module.pwd,
         'getpwnam',
         lambda username: SimpleNamespace(pw_dir=str(user_home)),
     )
@@ -40,7 +40,7 @@ def fake_docker_generator(monkeypatch: pytest.MonkeyPatch):
         output_dir.joinpath('docker-compose-dev.yaml').write_text('services: {}\n')
         output_dir.joinpath('.resources').mkdir()
 
-    monkeypatch.setattr(ros_project_creator_module, 'generate_docker_context', generate_docker_context)
+    monkeypatch.setattr(ros_project_generator_module, 'generate_docker_context', generate_docker_context)
     return calls
 
 

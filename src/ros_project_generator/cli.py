@@ -3,7 +3,7 @@ import sys
 from collections.abc import Sequence
 from typing import Optional
 
-from ros_project_creator import create_ros_project
+from ros_project_generator import create_ros_project
 
 
 def main(argv: Optional[Sequence[str]] = None) -> None:

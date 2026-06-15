@@ -8,8 +8,8 @@ from typing import Optional
 
 import argcomplete
 
-from ros_project_creator.utilities import Utilities
-from ros_project_creator.vscode_project_creator import (
+from ros_project_generator.utilities import Utilities
+from ros_project_generator.vscode_project_creator import (
     VscodeProjectCreator,
     VscodeProjectCreatorException,
 )

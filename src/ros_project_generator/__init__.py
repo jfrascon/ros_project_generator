@@ -1,5 +1,5 @@
 """
-ros-project
+ros-project-generator
 
 This package provides tools for creating and configuring ROS-based development projects
 with Docker, VS Code, CI/CD and ROS best practices.
@@ -16,7 +16,7 @@ Public API:
 Usage example:
 
     from pathlib import Path
-    from ros_project_creator import RosProjectCreator
+    from ros_project_generator import RosProjectCreator
 
     creator = RosProjectCreator(
         project_id="myrobot",
@@ -38,7 +38,7 @@ __all__ = ["RosProjectCreator", "VscodeProjectCreator"]
 
 def __getattr__(name: str):
     if name == "RosProjectCreator":
-        from .ros_project_creator import RosProjectCreator
+        from .ros_project_generator import RosProjectCreator
 
         return RosProjectCreator
 

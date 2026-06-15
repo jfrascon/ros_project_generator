@@ -8,8 +8,8 @@ from typing import Optional
 
 import argcomplete
 
-from ros_project_creator.ros_project_creator import RosProjectCreator, RosProjectCreatorException
-from ros_project_creator.utilities import Utilities
+from ros_project_generator.ros_project_generator import RosProjectCreator, RosProjectCreatorException
+from ros_project_generator.utilities import Utilities
 
 
 def main(argv: Optional[Sequence[str]] = None, prog: Optional[str] = None) -> None:

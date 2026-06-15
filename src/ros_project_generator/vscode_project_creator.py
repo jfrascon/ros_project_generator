@@ -3,10 +3,10 @@
 import os
 from pathlib import Path
 
-from ros_project_creator.logging_utils import create_logger
-from ros_project_creator.resource_installer import ResourceInstaller, ResourceSpec
-from ros_project_creator.ros_variant import RosVariant
-from ros_project_creator.utilities import Utilities
+from ros_project_generator.logging_utils import create_logger
+from ros_project_generator.resource_installer import ResourceInstaller, ResourceSpec
+from ros_project_generator.ros_variant import RosVariant
+from ros_project_generator.utilities import Utilities
 
 
 class VscodeProjectCreatorException(Exception):
@@ -141,7 +141,7 @@ class VscodeProjectCreator:
         if self._ros_variant.get_version() != 2:
             raise VscodeProjectCreatorException(
                 f"ROS distro '{self._ros_variant.get_distro()}' is ROS {self._ros_variant.get_version()}. "
-                'ros-project currently supports ROS 2 only.'
+                'ros-project-generator currently supports ROS 2 only.'
             )
 
     def _create_items_to_install(self) -> None:

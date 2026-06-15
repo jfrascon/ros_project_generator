@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from ros_project_creator.utilities import Utilities
+from ros_project_generator.utilities import Utilities
 
 
 class RosVariant:
