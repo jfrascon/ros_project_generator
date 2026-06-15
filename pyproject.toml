@@ -1,5 +1,5 @@
 [project]
-name = "ros_project_creator"
+name = "ros-project"
 version = "1.0.0"
 description = "A tool for generating ROS projects with automation and DevOps practices"
 readme = "README.md"
@@ -26,9 +26,9 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://ice.eurecat.org/gitlab/robotics-automation/ros_project_creator"
-Issues = "https://ice.eurecat.org/gitlab/robotics-automation/ros_project_creator/issues"
-Homepage = "https://ice.eurecat.org/gitlab/robotics-automation/ros_project_creator"
+Repository = "https://ice.eurecat.org/gitlab/robotics-automation/ros-project"
+Issues = "https://ice.eurecat.org/gitlab/robotics-automation/ros-project/issues"
+Homepage = "https://ice.eurecat.org/gitlab/robotics-automation/ros-project"
 
 [project.scripts]
 ros-project = "ros_project_creator.cli:main"

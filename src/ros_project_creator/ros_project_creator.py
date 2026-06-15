@@ -227,7 +227,7 @@ class RosProjectCreator:
         if self._ros_variant.get_version() != 2:
             raise RosProjectCreatorException(
                 f"ROS distro '{self._ros_variant.get_distro()}' is ROS {self._ros_variant.get_version()}. "
-                'ros_project_creator currently supports ROS 2 only.'
+                'ros-project currently supports ROS 2 only.'
             )
 
     def _create_items_to_install(self) -> None:

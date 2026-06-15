@@ -1,5 +1,5 @@
 """
-ros_project_creator
+ros-project
 
 This package provides tools for creating and configuring ROS-based development projects
 with Docker, VS Code, CI/CD and ROS best practices.
