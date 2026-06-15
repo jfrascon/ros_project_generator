@@ -2,7 +2,9 @@
 import argparse
 import os
 import sys
+from collections.abc import Sequence
 from pathlib import Path
+from typing import Optional
 
 import argcomplete
 
@@ -10,7 +12,7 @@ from ros_project_creator.ros_project_creator import RosProjectCreator, RosProjec
 from ros_project_creator.utilities import Utilities
 
 
-def main():
+def main(argv: Optional[Sequence[str]] = None, prog: Optional[str] = None) -> None:
     try:
         if os.geteuid() == 0:
             raise RuntimeError('This script must not be run with sudo or as root')
@@ -25,6 +27,7 @@ def main():
         )
 
         parser = argparse.ArgumentParser(
+            prog=prog,
             description='Creates a new ROS project based on templates',
             allow_abbrev=False,  # Disable prefix matching
             add_help=False,  # Add custom help message
@@ -86,7 +89,7 @@ def main():
         )
 
         argcomplete.autocomplete(parser)
-        args = parser.parse_args()
+        args = parser.parse_args(argv)
 
         RosProjectCreator(
             project_id=args.project_id,

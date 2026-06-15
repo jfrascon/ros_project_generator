@@ -31,8 +31,7 @@ Issues = "https://ice.eurecat.org/gitlab/robotics-automation/ros_project_creator
 Homepage = "https://ice.eurecat.org/gitlab/robotics-automation/ros_project_creator"
 
 [project.scripts]
-create_ros_project = "ros_project_creator.create_ros_project:main"
-create_vscode_project = "ros_project_creator.create_vscode_project:main"
+ros-project = "ros_project_creator.cli:main"
 
 [project.optional-dependencies]
 dev = ["black", "pytest"]

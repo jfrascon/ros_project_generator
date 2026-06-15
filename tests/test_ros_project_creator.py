@@ -3,6 +3,7 @@ from types import SimpleNamespace
 
 import pytest
 
+import ros_project_creator.cli as cli_module
 import ros_project_creator.create_ros_project as create_ros_project_module
 import ros_project_creator.create_vscode_project as create_vscode_project_module
 import ros_project_creator.ros_project_creator as ros_project_creator_module
@@ -230,6 +231,41 @@ def test_create_ros_project_cli_defaults_image_main_user(monkeypatch: pytest.Mon
     create_ros_project_module.main()
 
     assert calls[0]['image_main_user'] == 'dev'
+
+
+def test_ros_project_cli_new_delegates_to_project_creator(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    calls = []
+
+    def create_project(argv, prog=None):
+        calls.append((argv, prog))
+
+    monkeypatch.setattr(cli_module.create_ros_project, 'main', create_project)
+
+    cli_module.main(
+        [
+            'new',
+            'demo',
+            str(tmp_path / 'demo'),
+            'ros:jazzy',
+            'jazzy',
+            '-u',
+            'developer',
+        ]
+    )
+
+    assert calls == [
+        (
+            [
+                'demo',
+                str(tmp_path / 'demo'),
+                'ros:jazzy',
+                'jazzy',
+                '-u',
+                'developer',
+            ],
+            'ros-project new',
+        )
+    ]
 
 
 def test_create_ros_project_cli_accepts_image_main_user_option(

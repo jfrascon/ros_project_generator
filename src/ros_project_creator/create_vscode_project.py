@@ -2,7 +2,9 @@
 import argparse
 import os
 import sys
+from collections.abc import Sequence
 from pathlib import Path
+from typing import Optional
 
 import argcomplete
 
@@ -13,7 +15,7 @@ from ros_project_creator.vscode_project_creator import (
 )
 
 
-def main():
+def main(argv: Optional[Sequence[str]] = None, prog: Optional[str] = None) -> None:
     try:
         if os.geteuid() == 0:
             raise RuntimeError('This script must not be run with sudo or as root')
@@ -28,6 +30,7 @@ def main():
         )
 
         parser = argparse.ArgumentParser(
+            prog=prog,
             description='Creates a new VS Code project based on templates',
             allow_abbrev=False,  # Disable prefix matching
             add_help=False,  # Add custom help message
@@ -96,7 +99,7 @@ def main():
 
         argcomplete.autocomplete(parser)
 
-        args = parser.parse_args()
+        args = parser.parse_args(argv)
 
         # Derive the image user home if not provided.
         project_id = Utilities.clean_str(args.project_id)

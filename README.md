@@ -68,20 +68,20 @@ reinstalling the package.
 Create a ROS 2 project:
 
 ```sh
-create_ros_project PROJECT_ID PROJECT_DIR BASE_IMAGE ROS_DISTRO [options]
+ros-project new PROJECT_ID PROJECT_DIR BASE_IMAGE ROS_DISTRO [options]
 ```
 
 Example:
 
 ```sh
-create_ros_project my_robot ~/workspaces/my_robot ros:jazzy jazzy \
+ros-project new my_robot ~/workspaces/my_robot ros:jazzy jazzy \
   --img-id my_robot:jazzy
 ```
 
 Create the same project without VS Code files:
 
 ```sh
-create_ros_project my_robot ~/workspaces/my_robot ros:jazzy jazzy \
+ros-project new my_robot ~/workspaces/my_robot ros:jazzy jazzy \
   --img-id my_robot:jazzy \
   --no-vscode
 ```
@@ -89,7 +89,7 @@ create_ros_project my_robot ~/workspaces/my_robot ros:jazzy jazzy \
 Supported ROS distributions are listed by:
 
 ```sh
-create_ros_project -h
+ros-project new -h
 ```
 
 At the time this README was written, the project supports ROS 2 distributions only.
