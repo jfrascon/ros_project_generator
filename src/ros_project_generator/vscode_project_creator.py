@@ -150,12 +150,12 @@ class VscodeProjectCreator:
         self._items_to_install = [
             ResourceSpec.template(
                 '.devcontainer/devcontainer.json',
-                'vscode/dot_devcontainer.j2',
-                {'service': service, 'img_user': self._img_user, 'img_workspace_dir': self._img_workspace_dir},
+                'vscode/devcontainer.json.j2',
+                {'service': service, 'remote_user': self._img_user, 'img_workspace_dir': self._img_workspace_dir},
             ),
             ResourceSpec.template(
                 '.devcontainer/docker-compose.yaml',
-                'vscode/docker-compose.j2',
+                'vscode/docker-compose.yaml.j2',
                 {
                     'service': service,
                     'img_id': self._img_id,
@@ -176,17 +176,17 @@ class VscodeProjectCreator:
             ),
             ResourceSpec.template(
                 '.vscode/c_cpp_properties.json',
-                'vscode/c_cpp_properties.j2',
+                'vscode/c_cpp_properties.json.j2',
                 {
                     'c_version': f'c{self._ros_variant.get_c_version()}',
                     'cpp_version': f'c++{self._ros_variant.get_cpp_version()}',
                     'ros_distro': self._ros_variant.get_distro(),
                 },
             ),
-            ResourceSpec.template('.vscode/tasks.json', 'vscode/tasks.j2', {}, executable=True),
+            ResourceSpec.template('.vscode/tasks.json', 'vscode/tasks.json.j2', {}, executable=True),
             ResourceSpec.template(
                 'ws.code-workspace',
-                'vscode/ws.j2',
+                'vscode/ws.code-workspace.j2',
                 {
                     'project_id': self._project_id,
                     'ros_distro': self._ros_variant.get_distro(),
