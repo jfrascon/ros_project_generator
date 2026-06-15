@@ -42,9 +42,16 @@ def main():
 
         parser.add_argument('base_img', type=str, help="Base Docker image to use (e.g. 'eutrob/eut_ros:humble')")
 
-        parser.add_argument('img_user', type=str, help='Active user to use in the resulting Docker image')
-
         parser.add_argument('ros_distro', type=str, help=f'ROS distro to use: {supported_ros_distros}')
+
+        parser.add_argument(
+            '-u',
+            '--image-main-user',
+            type=str,
+            default='dev',
+            metavar='USER',
+            help='User to run containers for the resulting image. Default: dev.',
+        )
 
         parser.add_argument(
             '--img-id',
@@ -86,7 +93,7 @@ def main():
             project_dir=Path(args.project_dir),
             ros_distro=args.ros_distro,
             base_img=args.base_img,
-            image_main_user=args.img_user,
+            image_main_user=args.image_main_user,
             img_id=args.img_id,
             use_host_nvidia_driver=args.use_host_nvidia_driver,
             use_vscode_project=not args.no_vscode,

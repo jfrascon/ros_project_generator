@@ -68,20 +68,20 @@ reinstalling the package.
 Create a ROS 2 project:
 
 ```sh
-create_ros_project PROJECT_ID PROJECT_DIR BASE_IMAGE IMAGE_USER ROS_DISTRO [options]
+create_ros_project PROJECT_ID PROJECT_DIR BASE_IMAGE ROS_DISTRO [options]
 ```
 
 Example:
 
 ```sh
-create_ros_project my_robot ~/workspaces/my_robot ros:jazzy developer jazzy \
+create_ros_project my_robot ~/workspaces/my_robot ros:jazzy jazzy \
   --img-id my_robot:jazzy
 ```
 
 Create the same project without VS Code files:
 
 ```sh
-create_ros_project my_robot ~/workspaces/my_robot ros:jazzy developer jazzy \
+create_ros_project my_robot ~/workspaces/my_robot ros:jazzy jazzy \
   --img-id my_robot:jazzy \
   --no-vscode
 ```

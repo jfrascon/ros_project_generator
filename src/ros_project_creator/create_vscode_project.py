@@ -40,16 +40,24 @@ def main():
         parser.add_argument(
             'img_id', type=str, help='ID of the Docker image that VS Code will use to create a container'
         )
-        parser.add_argument('img_user', type=str, help='User to use inside the container')
         parser.add_argument('workspace_dir', type=str, help='Path to the VS Code workspace on host')
         parser.add_argument('img_workspace_dir', type=str, help='Absolute path to the workspace in the image')
 
         # Optional arguments
         parser.add_argument(
+            '-u',
+            '--image-main-user',
+            type=str,
+            default='dev',
+            metavar='USER',
+            help='User to run containers for the resulting image. Default: dev.',
+        )
+
+        parser.add_argument(
             '--img-user-home',
             type=str,
             default='',
-            help="Absolute home path of 'img_user' inside the image (defaults to /home/<img_user> or /root)",
+            help="Absolute home path of the image main user inside the image. Default: /home/<user> or /root.",
         )
 
         parser.add_argument(
@@ -90,11 +98,11 @@ def main():
 
         args = parser.parse_args()
 
-        # Derive img_user_home if not provided
+        # Derive the image user home if not provided.
         project_id = Utilities.clean_str(args.project_id)
         ros_distro = Utilities.clean_str(args.ros_distro)
         img_id = Utilities.clean_str(args.img_id)
-        img_user = Utilities.clean_str(args.img_user)
+        img_user = Utilities.clean_str(args.image_main_user)
         workspace_dir = Path(Utilities.clean_str(args.workspace_dir))
         img_workspace_dir = Path(Utilities.clean_str(args.img_workspace_dir))
         img_user_home_str = Utilities.clean_str(args.img_user_home)

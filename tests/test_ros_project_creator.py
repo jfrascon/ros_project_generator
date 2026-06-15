@@ -3,6 +3,8 @@ from types import SimpleNamespace
 
 import pytest
 
+import ros_project_creator.create_ros_project as create_ros_project_module
+import ros_project_creator.create_vscode_project as create_vscode_project_module
 import ros_project_creator.ros_project_creator as ros_project_creator_module
 from ros_project_creator.ros_project_creator import RosProjectCreator, RosProjectCreatorException
 from ros_project_creator.vscode_project_creator import VscodeProjectCreator, VscodeProjectCreatorException
@@ -204,3 +206,111 @@ def test_vscode_project_rejects_blank_string_parameters(
 
     with pytest.raises(VscodeProjectCreatorException, match='must be a non-empty string'):
         VscodeProjectCreator(**params)
+
+
+def test_create_ros_project_cli_defaults_image_main_user(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    calls = []
+
+    def create_project(**kwargs):
+        calls.append(kwargs)
+
+    monkeypatch.setattr(create_ros_project_module, 'RosProjectCreator', create_project)
+    monkeypatch.setattr(
+        create_ros_project_module.sys,
+        'argv',
+        [
+            'create_ros_project',
+            'demo',
+            str(tmp_path / 'demo'),
+            'ros:jazzy',
+            'jazzy',
+        ],
+    )
+
+    create_ros_project_module.main()
+
+    assert calls[0]['image_main_user'] == 'dev'
+
+
+def test_create_ros_project_cli_accepts_image_main_user_option(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    calls = []
+
+    def create_project(**kwargs):
+        calls.append(kwargs)
+
+    monkeypatch.setattr(create_ros_project_module, 'RosProjectCreator', create_project)
+    monkeypatch.setattr(
+        create_ros_project_module.sys,
+        'argv',
+        [
+            'create_ros_project',
+            'demo',
+            str(tmp_path / 'demo'),
+            'ros:jazzy',
+            'jazzy',
+            '-u',
+            'developer',
+        ],
+    )
+
+    create_ros_project_module.main()
+
+    assert calls[0]['image_main_user'] == 'developer'
+
+
+def test_create_vscode_project_cli_defaults_image_main_user(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    calls = []
+
+    def create_project(*args):
+        calls.append(args)
+
+    monkeypatch.setattr(create_vscode_project_module, 'VscodeProjectCreator', create_project)
+    monkeypatch.setattr(
+        create_vscode_project_module.sys,
+        'argv',
+        [
+            'create_vscode_project',
+            'demo',
+            'jazzy',
+            'demo:latest',
+            str(tmp_path / 'workspace'),
+            '/home/dev/workspace',
+        ],
+    )
+
+    create_vscode_project_module.main()
+
+    assert calls[0][3] == 'dev'
+    assert calls[0][4] == Path('/home/dev')
+
+
+def test_create_vscode_project_cli_accepts_image_main_user_option(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    calls = []
+
+    def create_project(*args):
+        calls.append(args)
+
+    monkeypatch.setattr(create_vscode_project_module, 'VscodeProjectCreator', create_project)
+    monkeypatch.setattr(
+        create_vscode_project_module.sys,
+        'argv',
+        [
+            'create_vscode_project',
+            'demo',
+            'jazzy',
+            'demo:latest',
+            str(tmp_path / 'workspace'),
+            '/home/developer/workspace',
+            '--image-main-user',
+            'developer',
+        ],
+    )
+
+    create_vscode_project_module.main()
+
+    assert calls[0][3] == 'developer'
+    assert calls[0][4] == Path('/home/developer')
