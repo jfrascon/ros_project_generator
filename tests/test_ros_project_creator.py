@@ -62,6 +62,7 @@ def test_create_ros2_project_delegates_docker_generation(fake_active_user: Path,
     assert docker_config.ros_distro == 'jazzy'
     assert docker_config.img_id == 'demo:latest'
     assert docker_config.output_dir == project_dir / 'docker'
+    assert docker_config.rosdep_packages_dir == '../src'
 
     assert project_dir.joinpath('docker/Dockerfile').is_file()
     assert project_dir.joinpath('docker/build.py').is_file()

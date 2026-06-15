@@ -292,6 +292,7 @@ class RosProjectCreator:
                     use_host_nvidia_driver=self._use_host_nvidia_driver,
                     meta_title=f'{self._project_id} ROS 2 Docker image',
                     meta_desc=f'Docker image for the {self._project_id} ROS 2 development project',
+                    rosdep_packages_dir='../src',
                 )
             )
         except RoboticsDockersError as e:
