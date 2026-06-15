@@ -56,7 +56,9 @@ def main():
             ),
         )
 
-        parser.add_argument('--use-host-nvidia-driver', action='store_true', help="Use host's NVIDIA driver")
+        parser.add_argument(
+            '--nvidia', action='store_true', dest='use_host_nvidia_driver', help="Use host's NVIDIA driver"
+        )
 
         parser.add_argument('--no-vscode', action='store_true', help='Do not create VS Code project')
 

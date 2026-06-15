@@ -52,7 +52,9 @@ def main():
             help="Absolute home path of 'img_user' inside the image (defaults to /home/<img_user> or /root)",
         )
 
-        parser.add_argument('--use-host-nvidia-driver', action='store_true', help="Use host's NVIDIA driver")
+        parser.add_argument(
+            '--nvidia', action='store_true', dest='use_host_nvidia_driver', help="Use host's NVIDIA driver"
+        )
 
         parser.add_argument(
             '--no-console-log',
