@@ -36,14 +36,14 @@ def main(argv: Optional[Sequence[str]] = None, prog: Optional[str] = None) -> No
         )
 
         parser.add_argument(
-            'project_id', type=str, help="Short, descriptive project identifier for internal reference (e.g. 'robproj')"
+            'project_id', type=str, help="Short, descriptive project identifier for internal reference (e.g. 'botzilla')"
         )
 
         parser.add_argument(
-            'project_dir', type=str, help="Path where the project will be created (e.g. '~/projects/robproj')"
+            'project_dir', type=str, help="Path where the project will be created (e.g. '~/projects/botzilla')"
         )
 
-        parser.add_argument('base_img', type=str, help="Base Docker image to use (e.g. 'eutrob/eut_ros:humble')")
+        parser.add_argument('base_img', type=str, help="Base Docker image to use (e.g. 'ubuntu:24.04')")
 
         parser.add_argument('ros_distro', type=str, help=f'ROS distro to use: {supported_ros_distros}')
 
@@ -61,7 +61,7 @@ def main(argv: Optional[Sequence[str]] = None, prog: Optional[str] = None) -> No
             type=str,
             default=None,
             help=(
-                "ID of the resulting Docker image (e.g. 'robproj:humble'). If not set, defaults to "
+                "ID of the resulting Docker image (e.g. 'botzilla:jazzy'). If not set, defaults to "
                 "'<project-id>:latest'"
             ),
         )
