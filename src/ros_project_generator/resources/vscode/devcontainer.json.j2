@@ -2,6 +2,9 @@
     "dockerComposeFile": "docker-compose.yaml",
     "service": "{{ service }}",
     "shutdownAction": "stopCompose",
+    "updateRemoteUserUID": true,
+    "overrideCommand": false,
+    "containerUser": "root",
     "remoteUser": "{{ remote_user }}",
     "workspaceFolder": "{{ img_workspace_dir }}",
     "customizations": {

@@ -1,3 +1,5 @@
+import json
+import os
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -111,8 +113,19 @@ def test_create_ros2_project_with_vscode_renders_templates(
         assert '{{' not in text
         assert '}}' not in text
 
-    assert 'demo/vscode:latest' in project_dir.joinpath('.devcontainer/docker-compose.yaml').read_text()
-    assert '"remoteUser": "developer"' in project_dir.joinpath('.devcontainer/devcontainer.json').read_text()
+    devcontainer = json.loads(project_dir.joinpath('.devcontainer/devcontainer.json').read_text())
+
+    compose_text = project_dir.joinpath('.devcontainer/docker-compose.yaml').read_text()
+    render_device = Path('/dev/dri/renderD128')
+    expected_render_gid = render_device.stat().st_gid if render_device.exists() else os.getgid()
+
+    assert 'demo/vscode:latest' in compose_text
+    assert 'RENDER_GID' not in compose_text
+    assert f'      - "{expected_render_gid}"' in compose_text
+    assert devcontainer['updateRemoteUserUID'] is True
+    assert devcontainer['overrideCommand'] is False
+    assert devcontainer['containerUser'] == 'root'
+    assert devcontainer['remoteUser'] == 'developer'
     assert '"ROS2.distro": "jazzy"' in project_dir.joinpath('ws.code-workspace').read_text()
 
 
