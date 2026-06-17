@@ -94,18 +94,18 @@ services:
     #  - "c 189:* rmw" # usb_device
 
     environment:
-      - DISPLAY=${DISPLAY}
-      - QT_X11_NO_MITSHM=1
-      - TERM=${TERM:-xterm-256color}
-      - XAUTHORITY=/tmp/.cookies.xauth
+      DISPLAY: "${DISPLAY}"
+      QT_X11_NO_MITSHM: "1"
+      TERM: "${TERM:-xterm-256color}"
+      XAUTHORITY: "/tmp/.cookies.xauth"
       {% if use_host_nvidia_driver %}
-      - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=all
+      NVIDIA_VISIBLE_DEVICES: "all"
+      NVIDIA_DRIVER_CAPABILITIES: "all"
       {% endif %}
 
       # Used by the entrypoint to remap the container user and then exec with gosu.
-      - HOST_UID={{ host_uid }}
-      - HOST_UPGID={{ host_upgid }}
+      HOST_UID: "{{ host_uid }}"
+      HOST_UPGID: "{{ host_upgid }}"
 
     # Add the GID of the render device group so that all container processes
     # (including those opened by VS Code) can access /dev/dri/renderD* for
