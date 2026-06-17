@@ -1,5 +1,9 @@
 # ros-project-generator
 
+<p align="center">
+  <img src="docs/assets/logo.png" alt="ros-project-generator logo" width="500">
+</p>
+
 `ros-project-generator` creates a ROS 2 workspace skeleton and can optionally add a VS Code Dev Container
 configuration. It does not generate Docker images by itself.
 
