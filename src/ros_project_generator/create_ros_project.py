@@ -36,7 +36,9 @@ def main(argv: Optional[Sequence[str]] = None, prog: Optional[str] = None) -> No
         )
 
         parser.add_argument(
-            'project_id', type=str, help="Short, descriptive project identifier for internal reference (e.g. 'botzilla')"
+            'project_id',
+            type=str,
+            help="Short, descriptive project identifier for internal reference (e.g. 'botzilla')",
         )
 
         parser.add_argument(

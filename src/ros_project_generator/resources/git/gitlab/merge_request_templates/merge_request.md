@@ -20,7 +20,7 @@ Provide details on how the changes were tested. Include unit, integration, and m
 - [ ] Integration Tests
 - [ ] Manual Testing
 - [ ] Other:
-  
+
 ## Related Issues
 
 Link to the issue(s) being resolved. If the MR closes an issue, mention it with GitLab's auto-close keyword (e.g., `Closes #123`).

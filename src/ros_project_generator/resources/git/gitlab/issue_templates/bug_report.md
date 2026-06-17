@@ -12,7 +12,7 @@ How one can reproduce the issue - this is very important(include detailed instru
 2. Click on '...'
 3. Scroll down to '...'
 4. See error
-   
+
 ## Current Behavior
 
 A detailed explanation of what actually happens.
@@ -21,7 +21,7 @@ A detailed explanation of what actually happens.
 
 A description of what you expected to happen instead of the actual behavior.
 
-## Screenshots / Logs 
+## Screenshots / Logs
 
 Paste any relevant logs - use code blocks (```) to format console output, logs, and code, as it's very hard to read otherwise.
 

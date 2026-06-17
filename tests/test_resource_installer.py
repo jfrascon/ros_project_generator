@@ -15,9 +15,7 @@ def test_resource_installer_creates_directories_copies_files_and_renders_templat
     resources_dir.joinpath('template.j2').write_text('project={{ project_id }}\n')
 
     ResourceInstaller(
-        resources_dir=resources_dir,
-        target_dir=target_dir,
-        logger=logging.getLogger('test_resource_installer'),
+        resources_dir=resources_dir, target_dir=target_dir, logger=logging.getLogger('test_resource_installer')
     ).install(
         [
             ResourceSpec.directory('src/config'),

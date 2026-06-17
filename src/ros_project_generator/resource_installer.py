@@ -29,18 +29,10 @@ class ResourceSpec:
 
     @classmethod
     def template(
-        cls,
-        destination: str,
-        source: str,
-        context: Optional[dict[str, Any]] = None,
-        executable: bool = False,
+        cls, destination: str, source: str, context: Optional[dict[str, Any]] = None, executable: bool = False
     ) -> 'ResourceSpec':
         return cls(
-            destination=destination,
-            kind='template',
-            source=source,
-            context=context or {},
-            executable=executable,
+            destination=destination, kind='template', source=source, context=context or {}, executable=executable
         )
 
 

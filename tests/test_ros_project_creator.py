@@ -21,9 +21,7 @@ def fake_active_user(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Path:
     monkeypatch.setenv('USER', 'developer')
     monkeypatch.delenv('SUDO_USER', raising=False)
     monkeypatch.setattr(
-        ros_project_generator_module.pwd,
-        'getpwnam',
-        lambda username: SimpleNamespace(pw_dir=str(user_home)),
+        ros_project_generator_module.pwd, 'getpwnam', lambda username: SimpleNamespace(pw_dir=str(user_home))
     )
 
     return user_home
@@ -81,10 +79,7 @@ def test_create_ros2_project_delegates_docker_generation(fake_active_user: Path,
     assert project_dir.joinpath('src/simulation/package.xml').is_file()
 
 
-def test_create_ros2_project_with_vscode_renders_templates(
-    fake_active_user: Path,
-    fake_docker_generator,
-) -> None:
+def test_create_ros2_project_with_vscode_renders_templates(fake_active_user: Path, fake_docker_generator) -> None:
     project_dir = fake_active_user / 'demo_vscode'
 
     RosProjectCreator(
@@ -162,18 +157,10 @@ def test_rejects_unsupported_ros_distro(fake_active_user: Path, fake_docker_gene
 
 
 @pytest.mark.parametrize(
-    ('field_name', 'field_value'),
-    [
-        ('project_id', '   '),
-        ('base_img', '   '),
-        ('image_main_user', '   '),
-    ],
+    ('field_name', 'field_value'), [('project_id', '   '), ('base_img', '   '), ('image_main_user', '   ')]
 )
 def test_ros_project_rejects_blank_string_parameters(
-    fake_active_user: Path,
-    fake_docker_generator,
-    field_name: str,
-    field_value: str,
+    fake_active_user: Path, fake_docker_generator, field_name: str, field_value: str
 ) -> None:
     params = {
         'project_id': 'demo',
@@ -193,19 +180,8 @@ def test_ros_project_rejects_blank_string_parameters(
     assert fake_docker_generator == []
 
 
-@pytest.mark.parametrize(
-    ('field_name', 'field_value'),
-    [
-        ('project_id', '   '),
-        ('img_id', '   '),
-        ('img_user', '   '),
-    ],
-)
-def test_vscode_project_rejects_blank_string_parameters(
-    tmp_path: Path,
-    field_name: str,
-    field_value: str,
-) -> None:
+@pytest.mark.parametrize(('field_name', 'field_value'), [('project_id', '   '), ('img_id', '   '), ('img_user', '   ')])
+def test_vscode_project_rejects_blank_string_parameters(tmp_path: Path, field_name: str, field_value: str) -> None:
     params = {
         'project_id': 'demo',
         'ros_distro': 'jazzy',
@@ -232,13 +208,7 @@ def test_create_ros_project_cli_defaults_image_main_user(monkeypatch: pytest.Mon
     monkeypatch.setattr(
         create_ros_project_module.sys,
         'argv',
-        [
-            'create_ros_project',
-            'demo',
-            str(tmp_path / 'demo'),
-            'ros:jazzy',
-            'jazzy',
-        ],
+        ['create_ros_project', 'demo', str(tmp_path / 'demo'), 'ros:jazzy', 'jazzy'],
     )
 
     create_ros_project_module.main()
@@ -254,36 +224,12 @@ def test_ros_project_cli_new_delegates_to_project_creator(monkeypatch: pytest.Mo
 
     monkeypatch.setattr(cli_module.create_ros_project, 'main', create_project)
 
-    cli_module.main(
-        [
-            'new',
-            'demo',
-            str(tmp_path / 'demo'),
-            'ros:jazzy',
-            'jazzy',
-            '-u',
-            'developer',
-        ]
-    )
+    cli_module.main(['new', 'demo', str(tmp_path / 'demo'), 'ros:jazzy', 'jazzy', '-u', 'developer'])
 
-    assert calls == [
-        (
-            [
-                'demo',
-                str(tmp_path / 'demo'),
-                'ros:jazzy',
-                'jazzy',
-                '-u',
-                'developer',
-            ],
-            'ros-project new',
-        )
-    ]
+    assert calls == [(['demo', str(tmp_path / 'demo'), 'ros:jazzy', 'jazzy', '-u', 'developer'], 'ros-project new')]
 
 
-def test_create_ros_project_cli_accepts_image_main_user_option(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+def test_create_ros_project_cli_accepts_image_main_user_option(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     calls = []
 
     def create_project(**kwargs):
@@ -293,15 +239,7 @@ def test_create_ros_project_cli_accepts_image_main_user_option(
     monkeypatch.setattr(
         create_ros_project_module.sys,
         'argv',
-        [
-            'create_ros_project',
-            'demo',
-            str(tmp_path / 'demo'),
-            'ros:jazzy',
-            'jazzy',
-            '-u',
-            'developer',
-        ],
+        ['create_ros_project', 'demo', str(tmp_path / 'demo'), 'ros:jazzy', 'jazzy', '-u', 'developer'],
     )
 
     create_ros_project_module.main()
@@ -319,14 +257,7 @@ def test_create_vscode_project_cli_defaults_image_main_user(monkeypatch: pytest.
     monkeypatch.setattr(
         create_vscode_project_module.sys,
         'argv',
-        [
-            'create_vscode_project',
-            'demo',
-            'jazzy',
-            'demo:latest',
-            str(tmp_path / 'workspace'),
-            '/home/dev/workspace',
-        ],
+        ['create_vscode_project', 'demo', 'jazzy', 'demo:latest', str(tmp_path / 'workspace'), '/home/dev/workspace'],
     )
 
     create_vscode_project_module.main()

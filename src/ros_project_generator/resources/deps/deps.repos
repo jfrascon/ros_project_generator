@@ -19,4 +19,3 @@
 #     url: https://<server>/<repository_path>
 #     version: <branch_or_tag_or_commit>
 #     #exclude: [] # list of repos files inside repository_path to exclude (optional)
-

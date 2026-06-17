@@ -9,10 +9,7 @@ from typing import Optional
 import argcomplete
 
 from ros_project_generator.utilities import Utilities
-from ros_project_generator.vscode_project_creator import (
-    VscodeProjectCreator,
-    VscodeProjectCreatorException,
-)
+from ros_project_generator.vscode_project_creator import VscodeProjectCreator, VscodeProjectCreatorException
 
 
 def main(argv: Optional[Sequence[str]] = None, prog: Optional[str] = None) -> None:
@@ -60,7 +57,7 @@ def main(argv: Optional[Sequence[str]] = None, prog: Optional[str] = None) -> No
             '--img-user-home',
             type=str,
             default='',
-            help="Absolute home path of the image main user inside the image. Default: /home/<user> or /root.",
+            help='Absolute home path of the image main user inside the image. Default: /home/<user> or /root.',
         )
 
         parser.add_argument(
@@ -77,12 +74,7 @@ def main(argv: Optional[Sequence[str]] = None, prog: Optional[str] = None) -> No
         )
 
         parser.add_argument(
-            '--log-file',
-            '--log_file',
-            dest='log_file',
-            type=str,
-            help='File to log output',
-            default='',
+            '--log-file', '--log_file', dest='log_file', type=str, help='File to log output', default=''
         )
         parser.add_argument(
             '--log-level',

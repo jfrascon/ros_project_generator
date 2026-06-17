@@ -33,18 +33,18 @@ Note: Internal utilities used by this package (e.g. `Utilities`, logging helpers
 are not part of the public API and should not be used directly.
 """
 
-__all__ = ["RosProjectCreator", "VscodeProjectCreator"]
+__all__ = ['RosProjectCreator', 'VscodeProjectCreator']
 
 
 def __getattr__(name: str):
-    if name == "RosProjectCreator":
+    if name == 'RosProjectCreator':
         from .ros_project_generator import RosProjectCreator
 
         return RosProjectCreator
 
-    if name == "VscodeProjectCreator":
+    if name == 'VscodeProjectCreator':
         from .vscode_project_creator import VscodeProjectCreator
 
         return VscodeProjectCreator
 
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    raise AttributeError(f'module {__name__!r} has no attribute {name!r}')

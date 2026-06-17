@@ -4,10 +4,7 @@ import logging
 
 
 def create_logger(
-    name: str,
-    use_console_log: bool = True,
-    log_file: str = '',
-    log_level: str = 'DEBUG',
+    name: str, use_console_log: bool = True, log_file: str = '', log_level: str = 'DEBUG'
 ) -> logging.Logger:
     """Create a standard logger with optional console and file handlers."""
     logger_name = name.strip()
