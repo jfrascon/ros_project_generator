@@ -25,7 +25,10 @@ repos:
       - id: check-merge-conflict
       - id: check-symlinks
       - id: check-yaml
+        exclude: ^src/\.clang-format$
       - id: check-json
+      - id: check-xml
+      - id: check-toml
       - id: debug-statements
       - id: end-of-file-fixer
       - id: mixed-line-ending
@@ -39,7 +42,7 @@ repos:
   # Ruff replaces both Black (formatter) and isort (import sorting)
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Find the latest version from https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.12
+    rev: v0.15.14
     hooks:
       # Run the linter and automatically fix any safe issues.
       - id: ruff
@@ -48,23 +51,38 @@ repos:
       - id: ruff-format
         args: [--config, pyproject.toml]
 
+  # TOML hooks
+  - repo: https://github.com/ComPWA/taplo-pre-commit
+    rev: v0.9.3
+    hooks:
+      - id: taplo-format
+      - id: taplo-lint
+        args: [--no-schema]
+
+  # YAML hooks
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: v2.16.0
+    hooks:
+      - id: pretty-format-yaml
+        args: [--autofix, --preserve-quotes]
+
   # CPP hooks
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v21.1.0
+    rev: v22.1.5
     hooks:
       - id: clang-format
         files: \.(cpp|hpp|c|h)$
 
   # Shell hooks
   - repo: https://github.com/scop/pre-commit-shfmt
-    rev: v3.12.0-2
+    rev: v3.13.1-1
     hooks:
       - id: shfmt
         args: [-w, -s, -i=4]
 
   # Conventional Commits validation (commit message hook)
   - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v4.2.0
+    rev: v4.4.0
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
