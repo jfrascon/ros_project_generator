@@ -107,12 +107,24 @@
     // NOTE: timonwong.shellcheck requires shellcheck: sudo apt install shellcheck
     // ==========================================================================
     "[shellscript]": {
-      "editor.defaultFormatter": "foxundermoon.shell-format"
+      "editor.defaultFormatter": "lumirelle.shell-format-rev"
     },
     // Use 4-space indentation in shell scripts (shfmt -i 4).
     "shellformat.flag": "-i 4",
     // Run shellcheck on save, not on every keystroke.
     "shellcheck.run": "onSave",
+    // ==========================================================================
+    // CMAKE SETTINGS
+    // ==========================================================================
+    // Disable auto-configure: in ROS 2 the build is driven by colcon, not cmake directly.
+    "cmake.configureOnOpen": false,
+    "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}",
+    "cmake.generator": "Ninja",
+    "[cmake]": {
+      "editor.defaultFormatter": "cheshirekow.cmake-format",
+      "editor.formatOnSave": false
+    },
+    "cmakeFormat.cwd": "${fileDirname}",
     // ==========================================================================
     // CPP SETTINGS
     // ==========================================================================
@@ -141,12 +153,6 @@
       "**/.git": true
     },
     // ==========================================================================
-    // CMAKE SETTINGS
-    // ==========================================================================
-    "[cmake]": {
-      "editor.defaultFormatter": "cheshirekow.cmake-format"
-    },
-    // ==========================================================================
     // PYTHON SETTINGS
     // ==========================================================================
     "python.analysis.autoFormatStrings": true,
@@ -162,20 +168,14 @@
     "[python]": {
       "editor.defaultFormatter": "charliermarsh.ruff",
       "editor.formatOnSave": true,
-      "editor.formatOnSaveMode": "modificationsIfAvailable",
+      "editor.formatOnSaveMode": "file",
       "editor.codeActionsOnSave": {
         "source.organizeImports": "never",
-        "source.fixAll.ruff": "explicit",
-        "source.organizeImports.ruff": "explicit"
+        "source.organizeImports.ruff": "always",
+        "source.fixAll": "never",
+        "source.fixAll.ruff": "always"
       }
     },
-    // ==========================================================================
-    // CMAKE TOOLS
-    // ==========================================================================
-    // Disable auto-configure: in ROS 2 the build is driven by colcon, not cmake directly.
-    "cmake.configureOnOpen": false,
-    "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}",
-    "cmake.generator": "Ninja",
     // ==========================================================================
     // CODE SPELL CHECKER
     // ==========================================================================
@@ -224,9 +224,14 @@
     // ==========================================================================
     // RUFF
     // ==========================================================================
-    //"ruff.configuration": leave it empty to use the pyproject.toml file of each repo.
+    "ruff.configurationPreference": "filesystemFirst",
     "ruff.importStrategy": "fromEnvironment",
-    "ruff.nativeServer": "on",
+    // Turn off native-server (legacy ruff-lsp turned on).
+    // Legacy ruff-lsp takes into account pyproject.toml files from submodules
+    // when the field 'extend-exclude' is used in the top-level pyproject.toml
+    // file (This is very convenient and native server does not support this
+    // feature yet)
+    "ruff.nativeServer": "off",
     "ruff.organizeImports": true,
     // ==========================================================================
     // YAML SETTINGS
@@ -247,8 +252,29 @@
     // TOML SETTINGS
     // ==========================================================================
     "[toml]": {
-      "editor.defaultFormatter": "tamasfe.even-better-toml"
+      "editor.defaultFormatter": "tamasfe.even-better-toml",
+      "editor.formatOnSave": true,
+      "editor.formatOnSaveMode": "file"
     },
+    "evenBetterToml.formatter.alignEntries": false,
+    "evenBetterToml.formatter.alignComments": true,
+    "evenBetterToml.formatter.arrayTrailingComma": true,
+    "evenBetterToml.formatter.arrayAutoExpand": true,
+    "evenBetterToml.formatter.inlineTableExpand": true,
+    "evenBetterToml.formatter.arrayAutoCollapse": true,
+    "evenBetterToml.formatter.compactArrays": true,
+    "evenBetterToml.formatter.compactInlineTables": false,
+    "evenBetterToml.formatter.compactEntries": false,
+    "evenBetterToml.formatter.columnWidth": 80,
+    "evenBetterToml.formatter.indentTables": false,
+    "evenBetterToml.formatter.indentEntries": false,
+    "evenBetterToml.formatter.indentString": "  ",
+    "evenBetterToml.formatter.trailingNewline": true,
+    "evenBetterToml.formatter.reorderKeys": false,
+    "evenBetterToml.formatter.reorderArrays": false,
+    "evenBetterToml.formatter.reorderInlineTables": false,
+    "evenBetterToml.formatter.allowedBlankLines": 2,
+    "evenBetterToml.formatter.crlf": false,
     // ==========================================================================
     // XML SETTINGS
     // ==========================================================================

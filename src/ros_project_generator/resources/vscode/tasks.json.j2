@@ -647,6 +647,27 @@
                 "showReuseMessage": true,
                 "clear": true
             }
+        },
+        {
+            // Organizes imports in the active Python file using the nearest pyproject.toml.
+            // Running from ${fileDirname} avoids the Ruff VS Code server using the workspace root
+            // configuration for reusable repositories under src/0_deps.
+            "label": "ruff organize imports current file",
+            "detail": "ruff check --select I --fix on the active file, from the file directory",
+            "type": "shell",
+            "command": "ruff check --select I --fix \"${fileBasename}\"",
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true
+            }
         }
         // Reference commands — not wired as tasks because they need manual setup:
         //
