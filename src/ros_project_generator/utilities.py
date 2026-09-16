@@ -1,6 +1,5 @@
-import re
 from pathlib import Path
-from typing import Optional
+import re
 
 import yaml
 
@@ -13,10 +12,9 @@ class Utilities:
     @staticmethod
     def assert_non_empty(item, error_msg: str) -> None:
         """
-        Asserts that the given item is not empty.
+        Validate that an item is not empty.
 
-        This function checks if the provided item is empty. If the item is empty, it raises an Exception with the
-        provided error message.
+        Raise ValueError with error_msg when item evaluates as false.
 
         Args:
             item: The item to check for emptiness. This can be a string, list, dictionary, set, or any other object that
@@ -25,6 +23,7 @@ class Utilities:
 
         Raises:
             Exception: If the item is empty.
+
         """
         if not item:  # Covers empty strings, lists, dicts, sets, None, etc.
             raise ValueError(error_msg)
@@ -32,7 +31,9 @@ class Utilities:
     @staticmethod
     def assert_dir_existence(path: Path, error_msg: str) -> None:
         """
-        Asserts the existence of a given path.
+        Validate that a path is an existing directory.
+
+        Raise NotADirectoryError with error_msg when path is missing or not a directory.
 
         Args:
             path (Path): The path to check.
@@ -40,6 +41,7 @@ class Utilities:
 
         Raises:
             Exception: If the path does not exist or is not a directory.
+
         """
         if not path.exists() or not path.is_dir():
             raise NotADirectoryError(error_msg)
@@ -47,7 +49,9 @@ class Utilities:
     @staticmethod
     def assert_file_existence(file: Path, error_msg: str) -> None:
         """
-        Asserts the existence of a file.
+        Validate that a path is an existing regular file.
+
+        Raise FileNotFoundError with error_msg when path is missing or not a regular file.
 
         Args:
             file (str): The file to check.
@@ -55,25 +59,31 @@ class Utilities:
 
         Raises:
             Exception: If the file does not exist or is not a file.
+
         """
         if not file.exists() or not file.is_file():
             raise FileNotFoundError(error_msg)
 
     @staticmethod
-    def clean_str(string: Optional[str]) -> Optional[str]:
+    def clean_str(string: str | None) -> str | None:
         """
-        Cleans a string by removing leading and trailing whitespace.
+        Normalize optional string whitespace.
+
         If the input string is None, it returns None.
+
         Args:
             string (str): The string to clean.
+
         Returns:
             str: The cleaned string or None if the input was None.
+
         """
         return string.strip() if string is not None else None
 
     @staticmethod
     def is_valid_project_id(project_id: str) -> bool:
-        """Return whether a project id is also a valid Compose project name.
+        """
+        Return whether a project id is also a valid Compose project name.
 
         The generated project id becomes the default Docker Compose project
         name. Validating it here prevents project generation from succeeding
@@ -93,7 +103,6 @@ class Utilities:
             https://docs.docker.com/get-started/docker-concepts/building-images/build-tag-and-publish-an-image/
             #tagging-images
         """
-
         # Optional registry prefix: host (lower‑case letters, digits, dots, dashes)
         # with optional :PORT, followed by a slash.
         host_and_port_prefix = r'([a-z0-9.-]+(:[0-9]+)?/)?'
@@ -122,7 +131,7 @@ class Utilities:
     @staticmethod
     def load_yaml(file: Path) -> dict:
         try:
-            with open(file, 'r') as f:
+            with open(file) as f:
                 content = yaml.safe_load(f)
                 return content if isinstance(content, dict) else {}
         except (FileNotFoundError, yaml.YAMLError):

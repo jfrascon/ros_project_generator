@@ -1,12 +1,11 @@
 import argparse
-import sys
 from collections.abc import Sequence
-from typing import Optional
+import sys
 
 from ros_project_generator import create_ros_project
 
 
-def main(argv: Optional[Sequence[str]] = None) -> None:
+def main(argv: Sequence[str] | None = None) -> None:
     args = list(sys.argv[1:] if argv is None else argv)
     parser = _build_parser()
 

@@ -1,10 +1,11 @@
-import shutil
 from pathlib import Path
+import shutil
 
 import yaml
 
 from ros_project_generator.logging_utils import create_logger
-from ros_project_generator.resource_installer import ResourceInstaller, ResourceSpec
+from ros_project_generator.resource_installer import ResourceInstaller
+from ros_project_generator.resource_installer import ResourceSpec
 from ros_project_generator.ros_variant import RosVariant
 from ros_project_generator.utilities import Utilities
 
@@ -14,7 +15,8 @@ class VscodeProjectCreatorException(Exception):
 
 
 class VscodeProjectCreator:
-    """Create editor files around the ROS project's Compose file.
+    """
+    Create editor files around the ROS project's Compose file.
 
     The production and Dev Container copies start with the same content, but
     they are separate physical files in the generated project. A developer can

@@ -1,5 +1,5 @@
 """
-ros-project-generator
+Provide ROS project generation and configuration tools.
 
 This package provides tools for creating and configuring ROS-based development projects
 with Docker, VS Code, CI/CD and ROS best practices.

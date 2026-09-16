@@ -1,15 +1,17 @@
 import os
+from pathlib import Path
 import pwd
 import shutil
 import subprocess
-from pathlib import Path
-from typing import Optional
 
-from robotics_dockers import DockerContextConfig, DockerContextResult, generate_docker_context
+from robotics_dockers import DockerContextConfig
+from robotics_dockers import DockerContextResult
+from robotics_dockers import generate_docker_context
 from robotics_dockers.errors import RoboticsDockersError
 
 from ros_project_generator.logging_utils import create_logger
-from ros_project_generator.resource_installer import ResourceInstaller, ResourceSpec
+from ros_project_generator.resource_installer import ResourceInstaller
+from ros_project_generator.resource_installer import ResourceSpec
 from ros_project_generator.ros_variant import RosVariant
 from ros_project_generator.utilities import Utilities
 from ros_project_generator.vscode_project_creator import VscodeProjectCreator
@@ -20,9 +22,7 @@ class RosProjectCreatorException(Exception):
 
 
 class RosProjectCreator:
-    """
-    Class to create a ROS project with various configurations and checks.
-    """
+    """Create a ROS project with configurable tooling and validation."""
 
     # ==========================================================================
     # non-static private methods
@@ -33,8 +33,8 @@ class RosProjectCreator:
         project_id: str,
         project_dir: Path,
         ros_distro: str,
-        img_id: Optional[str] = None,
-        base_img: Optional[str] = None,
+        img_id: str | None = None,
+        base_img: str | None = None,
         use_host_nvidia_driver: bool = False,
         use_vscode_project: bool = False,
         use_pre_commit: bool = True,
@@ -43,7 +43,8 @@ class RosProjectCreator:
         log_level: str = 'DEBUG',
     ):
         """
-        Initializes the RosProjectCreator class.
+        Initialize the ROS project generator.
+
         Args:
             project_id (str): The ID of the project.
             project_dir (Path): The path where the project will be created.
@@ -51,15 +52,17 @@ class RosProjectCreator:
             img_id (str): The image ID, or None to derive it from the project ID.
             base_img (str): Optional Docker base image. robotics_dockers chooses the
                 Ubuntu version associated with the ROS distribution when omitted.
+            use_host_nvidia_driver (bool): Whether the generated image uses the host NVIDIA driver.
             use_vscode_project (bool): Whether to create a VS Code project.
             use_pre_commit (bool): Whether to use pre-commit.
             use_console_log (bool): Whether to log to console.
             log_file (str): The file to log to.
             log_level (str): The logging level.
+
         Raises:
             Exception: If any of the parameters are invalid or if any required files are missing.
-        """
 
+        """
         # Logger construction is intentionally outside the try-except block because the
         # exception handler below needs a valid logger to report setup failures.
         self._logger = create_logger(
@@ -283,8 +286,7 @@ class RosProjectCreator:
         result = subprocess.run(
             cmd,
             cwd=str(cwd),  # Convert Path to string
-            stdout=subprocess.PIPE,  # Capture standard output to prevent automatic printing to the console
-            stderr=subprocess.PIPE,  # Capture standard error output to handle errors programmatically
+            capture_output=True,
             text=True,  # Convert output from bytes to a string for easier processing
             check=True,  # Raise a CalledProcessError exception if the command fails (non-zero exit code)
         )
@@ -309,8 +311,7 @@ class RosProjectCreator:
         result = subprocess.run(
             cmd,
             cwd=str(cwd),  # set the working directory where the command will be executed
-            stdout=subprocess.PIPE,  # capture standard output to prevent automatic printing to the console
-            stderr=subprocess.PIPE,  # capture standard error output to handle errors programmatically
+            capture_output=True,
             text=True,  # convert output from bytes to a string for easier processing
             check=True,  # raise a calledprocesserror exception if the command fails (non-zero exit code)
         )

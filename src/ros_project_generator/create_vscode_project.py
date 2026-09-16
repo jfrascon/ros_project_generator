@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 
 import argparse
-import os
-import sys
 from collections.abc import Sequence
+import os
 from pathlib import Path
-from typing import Optional
+import sys
 
 import argcomplete
 
 from ros_project_generator.utilities import Utilities
-from ros_project_generator.vscode_project_creator import VscodeProjectCreator, VscodeProjectCreatorException
+from ros_project_generator.vscode_project_creator import VscodeProjectCreator
+from ros_project_generator.vscode_project_creator import VscodeProjectCreatorException
 
 
-def main(argv: Optional[Sequence[str]] = None, prog: Optional[str] = None) -> None:
+def main(argv: Sequence[str] | None = None, prog: str | None = None) -> None:
     """Create VS Code files for an existing robotics_dockers project."""
     try:
         if os.geteuid() == 0:

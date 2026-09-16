@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 import argparse
-import os
-import sys
 from collections.abc import Sequence
+import os
 from pathlib import Path
-from typing import Optional
+import sys
 
 import argcomplete
 
-from ros_project_generator.ros_project_generator import RosProjectCreator, RosProjectCreatorException
+from ros_project_generator.ros_project_generator import RosProjectCreator
+from ros_project_generator.ros_project_generator import RosProjectCreatorException
 from ros_project_generator.utilities import Utilities
 
 
-def main(argv: Optional[Sequence[str]] = None, prog: Optional[str] = None) -> None:
+def main(argv: Sequence[str] | None = None, prog: str | None = None) -> None:
     try:
         if os.geteuid() == 0:
             raise RuntimeError('This script must not be run with sudo or as root')

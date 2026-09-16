@@ -1,7 +1,7 @@
 import json
 import os
-import subprocess
 from pathlib import Path
+import subprocess
 from types import SimpleNamespace
 
 import pytest
@@ -11,9 +11,11 @@ import ros_project_generator.cli as cli_module
 import ros_project_generator.create_ros_project as create_ros_project_module
 import ros_project_generator.create_vscode_project as create_vscode_project_module
 import ros_project_generator.ros_project_generator as ros_project_generator_module
-from ros_project_generator.ros_project_generator import RosProjectCreator, RosProjectCreatorException
+from ros_project_generator.ros_project_generator import RosProjectCreator
+from ros_project_generator.ros_project_generator import RosProjectCreatorException
 from ros_project_generator.utilities import Utilities
-from ros_project_generator.vscode_project_creator import VscodeProjectCreator, VscodeProjectCreatorException
+from ros_project_generator.vscode_project_creator import VscodeProjectCreator
+from ros_project_generator.vscode_project_creator import VscodeProjectCreatorException
 
 
 @pytest.fixture

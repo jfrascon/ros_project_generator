@@ -1,10 +1,13 @@
+from collections.abc import Iterable
+from dataclasses import dataclass
+from dataclasses import field
 import logging
-import shutil
-from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterable, Optional
+import shutil
+from typing import Any
 
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
 
 
 @dataclass(frozen=True)
@@ -13,12 +16,12 @@ class ResourceSpec:
 
     destination: str
     kind: str
-    source: Optional[str] = None
-    context: Optional[dict[str, Any]] = None
+    source: str | None = None
+    context: dict[str, Any] | None = None
     executable: bool = False
 
     @classmethod
-    def directory(cls, destination: str, source: Optional[str] = None) -> 'ResourceSpec':
+    def directory(cls, destination: str, source: str | None = None) -> 'ResourceSpec':
         return cls(destination=destination, kind='directory', source=source)
 
     @classmethod
@@ -27,7 +30,7 @@ class ResourceSpec:
 
     @classmethod
     def template(
-        cls, destination: str, source: str, context: Optional[dict[str, Any]] = None, executable: bool = False
+        cls, destination: str, source: str, context: dict[str, Any] | None = None, executable: bool = False
     ) -> 'ResourceSpec':
         return cls(
             destination=destination, kind='template', source=source, context=context or {}, executable=executable
@@ -70,7 +73,7 @@ class ResourceInstaller:
         else:
             raise self.exception_type(f"Unsupported resource kind '{resource.kind}' for '{resource.destination}'.")
 
-    def _install_directory(self, src_path: Optional[Path], dst_path: Path) -> None:
+    def _install_directory(self, src_path: Path | None, dst_path: Path) -> None:
         self.logger.info(f"Creating directory '{dst_path}'")
 
         if src_path is None:
@@ -84,7 +87,7 @@ class ResourceInstaller:
         shutil.copytree(src_path, dst_path, copy_function=shutil.copy2)
         dst_path.chmod(self.executable_mode)
 
-    def _install_file(self, resource: ResourceSpec, src_path: Optional[Path], dst_path: Path) -> None:
+    def _install_file(self, resource: ResourceSpec, src_path: Path | None, dst_path: Path) -> None:
         self.logger.info(f"Creating file '{dst_path}'")
 
         if src_path is None:
@@ -97,7 +100,7 @@ class ResourceInstaller:
         shutil.copy2(src_path, dst_path)
         self._chmod_file(dst_path, resource.executable)
 
-    def _install_template(self, resource: ResourceSpec, src_path: Optional[Path], dst_path: Path) -> None:
+    def _install_template(self, resource: ResourceSpec, src_path: Path | None, dst_path: Path) -> None:
         self.logger.info(f"Creating file '{dst_path}'")
 
         if src_path is None:
@@ -126,7 +129,7 @@ class ResourceInstaller:
         elif dst_path.is_dir():
             dst_path.rmdir()
 
-    def _resolve_source(self, resource: ResourceSpec) -> Optional[Path]:
+    def _resolve_source(self, resource: ResourceSpec) -> Path | None:
         if resource.source is None:
             return None
 

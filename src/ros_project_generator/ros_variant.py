@@ -28,48 +28,60 @@ class RosVariant:
 
     def get_c_version(self) -> str:
         """
-        Returns the C version associated with the ROS variant.
+        Return the C version associated with the ROS variant.
+
         Returns:
             str: The C version.
+
         """
         return self._ros_variant['c_version']
 
     def get_cpp_version(self) -> str:
         """
-        Returns the C++ version associated with the ROS variant.
+        Return the C++ version associated with the ROS variant.
+
         Returns:
             str: The C++ version.
+
         """
         return self._ros_variant['cpp_version']
 
     def get_distro(self) -> str:
         """
-        Returns the ROS distro.
+        Return the ROS distribution name.
+
         Returns:
             str: The ROS distro.
+
         """
         return self._ros_variant['ros_distro']
 
     def get_ubuntu_version(self) -> str:
         """
-        Returns the Ubuntu distro
+        Return the Ubuntu distribution version.
+
         Returns:
-            str: The Ubuntu distro
+            str: The Ubuntu distribution version.
+
         """
         return self._ros_variant['ubuntu_version']
 
     def get_version(self) -> str:
         """
-        Returns the ROS version.
+        Return the ROS version.
+
         Returns:
             str: The ROS version.
+
         """
         return self._ros_variant['ros_version']
 
     def get_python_version(self) -> str:
         """
-        Returns the Python version associated with the Ubuntu base for this ROS distro.
+        Return the Python version associated with this ROS distribution's Ubuntu base.
+
         Returns:
             str: The Python version (e.g., '3.8', '3.10', '3.12').
+
         """
         return self._ros_variant['python_version']

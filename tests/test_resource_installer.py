@@ -2,7 +2,8 @@ import logging
 
 import pytest
 
-from ros_project_generator.resource_installer import ResourceInstaller, ResourceSpec
+from ros_project_generator.resource_installer import ResourceInstaller
+from ros_project_generator.resource_installer import ResourceSpec
 
 
 def test_resource_installer_creates_directories_copies_files_and_renders_templates(tmp_path) -> None:
