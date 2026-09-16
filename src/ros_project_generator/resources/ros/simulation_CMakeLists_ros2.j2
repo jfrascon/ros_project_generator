@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.22)
 project(simulation)
 
 if(NOT CMAKE_C_STANDARD)
@@ -9,30 +9,63 @@ if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD {{ cpp_version }})
 endif()
 
-# Compiler warnings
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic -Wnon-virtual-dtor -Woverloaded-virtual -Wnull-dereference -Wunused-parameter)
 endif()
 
-# Find required dependencies.
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
-
 #find_package(<package> REQUIRED)
 
-# Install launch files.
 install(
   DIRECTORY config launch rviz scripts
   DESTINATION share/${PROJECT_NAME}/
-)
+  PATTERN "__pycache__" EXCLUDE
+  PATTERN "*.pyc" EXCLUDE)
 
-# Linting and testing tools
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  # Uncomment these lines to skip specific linters
-  # set(ament_cmake_copyright_FOUND TRUE)
-  # set(ament_cmake_cpplint_FOUND TRUE)
+  # Exclude linters that require package-specific configuration.
+  list(APPEND AMENT_LINT_AUTO_EXCLUDE
+    ament_cmake_clang_format
+    ament_cmake_cppcheck
+    ament_cmake_cpplint
+    ament_cmake_flake8)
+  # Register the remaining linters declared as test dependencies in package.xml.
   ament_lint_auto_find_test_dependencies()
+
+  find_package(ament_cmake_clang_format REQUIRED)
+  ament_clang_format(CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/.clang-format" include src test)
+
+  find_package(ament_cmake_cppcheck REQUIRED)
+  # Check only headers and source files. Some gtest macros such as TEST_F and
+  # TEST_P can produce cppcheck false positives in test sources.
+  ament_cppcheck(include src INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
+  # ament_cppcheck skips cppcheck versions known to be slow unless this
+  # environment variable explicitly allows them.
+  set_tests_properties(cppcheck PROPERTIES ENVIRONMENT "AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS=1")
+
+  find_package(ament_cmake_cpplint REQUIRED)
+  ament_cpplint(
+    MAX_LINE_LENGTH
+    120
+    FILTERS
+    -whitespace/newline
+    -whitespace/forcolon
+    -build/include_order
+    -runtime/indentation_namespace
+    -legal/copyright)
+
+  find_package(ament_cmake_flake8 REQUIRED)
+  ament_flake8(CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ament_flake8.ini")
+
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(test_transform_math test/test_transform_math.cpp)
+  target_include_directories(test_transform_math PRIVATE include)
+  ament_target_dependencies(test_transform_math tf2)
+
+  find_package(ament_cmake_pytest REQUIRED)
+  ament_add_pytest_test(test_launch_contract test/test_launch_contract.py)
 endif()
 
 ament_package()

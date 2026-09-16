@@ -7,11 +7,9 @@
   <author email="eutrob@eurecat.org">eutrob</author>
   <license>Apache-2.0</license>
 
-  <!-- Build system dependencies -->
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>ament_cmake_python</buildtool_depend>
 
-  <!-- Strictly runtime dependencies -->
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>launch_xml</exec_depend>
@@ -19,12 +17,25 @@
   <exec_depend>ros2launch</exec_depend>
   <exec_depend>rviz2</exec_depend>
 
-  <!-- Build-time and runtime dependencies -->
-
-
-  <!-- Test dependencies -->
+  <test_depend>ament_cmake_lint_cmake</test_depend>
+  <test_depend>ament_cmake_clang_format</test_depend>
+  <!--
+  <test_depend>ament_cmake_clang_tidy</test_depend>
+  -->
+  <test_depend>ament_cmake_cppcheck</test_depend>
+  <test_depend>ament_cmake_cpplint</test_depend>
+  <!--
+  <test_depend>ament_cmake_copyright</test_depend>
+  -->
+  <!--
+  <test_depend>ament_cmake_mypy</test_depend>
+  -->
+  <test_depend>ament_cmake_flake8</test_depend>
+  <test_depend>ament_cmake_pep257</test_depend>
+  <test_depend>ament_cmake_xmllint</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>ament_cmake_pytest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
