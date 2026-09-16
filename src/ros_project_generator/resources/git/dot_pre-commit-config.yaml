@@ -16,7 +16,7 @@ default_install_hook_types:
   - pre-commit
   - commit-msg
 
-exclude: ^build/|^install/|^log/|^\.vscode/
+exclude: ^build/|^install/|^log/|^\.vscode/|^src/0_deps/
 
 repos:
   # Standard hooks
@@ -33,6 +33,7 @@ repos:
       - id: check-shebang-scripts-are-executable
       - id: check-symlinks
       - id: check-yaml
+        exclude: (^|/)\.clang-format$
       - id: check-json
       - id: check-xml
       - id: check-toml
@@ -41,6 +42,8 @@ repos:
       - id: end-of-file-fixer
         exclude_types: [svg]
       - id: mixed-line-ending
+        # Use one deterministic line ending instead of preserving each file's majority style.
+        args: [--fix=lf]
       - id: trailing-whitespace
         exclude_types: [svg]
       - id: fix-byte-order-marker
@@ -52,11 +55,37 @@ repos:
   # Python hooks
   # Ruff replaces both Black (formatter) and isort (import sorting).
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.21
+    rev: v0.16.6
     hooks:
       - id: ruff-check
         args: [--fix]
       - id: ruff-format
+
+  # ROS 2 Python validation
+  # These hooks validate Python after Ruff applies its automatic changes.
+  - repo: local
+    hooks:
+      - id: ament_flake8
+        name: ament_flake8
+        description: Check Python code with the ROS 2 Flake8 configuration.
+        entry: ament_flake8
+        language: system
+        types: [python]
+        args: [--config=ament_flake8.ini]
+
+      - id: ament_pep257
+        name: ament_pep257
+        description: Check Python docstrings with the ROS 2 PEP 257 configuration.
+        entry: ament_pep257
+        language: system
+        types: [python]
+
+      # - id: ament_mypy
+      #   name: ament_mypy
+      #   description: Statically check Python type annotations with mypy.
+      #   entry: ament_mypy
+      #   language: system
+      #   types: [python]
 
   # TOML hooks
   - repo: https://github.com/ComPWA/taplo-pre-commit
@@ -77,7 +106,7 @@ repos:
 
   # CPP hooks
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v22.1.8
+    rev: v23.1.0
     hooks:
       - id: clang-format
         # .c: C.
@@ -94,20 +123,30 @@ repos:
   # to be installed in the development environment.
   - repo: local
     hooks:
+      - id: ament_cpplint
+        name: ament_cpplint
+        description: Check C/C++ style with ROS 2 cpplint.
+        entry: ament_cpplint
+        language: system
+        files: '\.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$'
+        args:
+          - --linelength=120
+          # Keep cpplint aligned with .clang-format:
+          # Disable whitespace/newline: .clang-format controls brace placement.
+          # Disable whitespace/forcolon: .clang-format omits the space before range-for ':'.
+          # Disable build/include_order: .clang-format preserves include order.
+          # Disable runtime/indentation_namespace: .clang-format controls namespace indentation.
+          # Disable legal/copyright: this project does not enforce copyright headers.
+          - --filters=-whitespace/newline,-whitespace/forcolon,-build/include_order,-runtime/indentation_namespace,-legal/copyright
+
       - id: ament_cppcheck
         name: ament_cppcheck
         description: Static code analysis of C/C++ files.
         entry: env AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS=1 ament_cppcheck
         language: system
         files: '\.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$'
-
-      - id: ament_cpplint
-        name: ament_cpplint
-        description: Static code analysis of C/C++ files.
-        entry: ament_cpplint
-        language: system
-        files: '\.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$'
-        args: ["--linelength=100", "--filter=-whitespace/newline"]
+        # Test sources are compiled, checked by the other C++ hooks, and run separately.
+        exclude: (^|/)test/
 
       - id: ament_lint_cmake
         name: ament_lint_cmake
@@ -115,6 +154,13 @@ repos:
         entry: ament_lint_cmake
         language: system
         files: CMakeLists\.txt$
+
+      - id: ament_xmllint
+        name: ament_xmllint
+        description: Check XML files with the ROS 2 XML linter.
+        entry: ament_xmllint
+        language: system
+        types: [xml]
 
       # Keep this hook as a reference for projects with a strict copyright policy.
       # - id: ament_copyright
@@ -132,7 +178,7 @@ repos:
         args: [-w, -s, -i=4]
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.11.0.1
+    rev: v0.11.0.1-1
     hooks:
       # ShellCheck may report many warnings in legacy scripts, but it catches real bugs.
       # Prefer justified local suppressions over disabling the hook; for example,

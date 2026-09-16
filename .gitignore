@@ -2,11 +2,36 @@ build/
 install/
 devel/
 log/
+
+# Local dependencies
+src/0_deps/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.ruff_cache
+.coverage
+.coverage.*
+htmlcov/
+.venv/
+venv/
+env/
+
+# Tooling
+.cache/
+.pre-commit-cache/
 .devcontainer/
 .pre-commit-cache/
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
 *.code-workspace
-*.egg-info/
-__pycache__/
-*.py[cod]
-context.txt

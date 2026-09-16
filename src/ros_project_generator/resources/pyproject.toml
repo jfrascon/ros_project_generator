@@ -1,74 +1,115 @@
-# ==============================================================================
-# Ruff configuration (formatter + linter)
-# ==============================================================================
-# This section configures Ruff, a high-performance Python linter and formatter.
-# All settings related to how Ruff analyzes and formats your code go under this table.
 [tool.ruff]
-line-length = 120
-# Set this when Python source roots are known, for example:
-# src = ["src/my_python_pkg", "tests"]
-src = []
+line-length = 99
+target-version = "py310"
+# Keep this root Ruff config focused on the workspace-owned packages.
+# Reusable repositories under src/0_deps have their own pyproject.toml files and Ruff rules.
+# This exclusion is for root-level runs such as `ruff check .`, `ruff format .`, or root pre-commit
+# hooks.
+# It is not meant to control how an editor formats an open and focused file inside a reusable
+# repository.
+# A correctly resolved editor action should use that repository's nearest pyproject.toml.
+extend-exclude = ["src/0_deps"]
+force-exclude = true
+# Ruff uses this classification to group first-party and third-party imports.
+# The workspace root owns coupled packages under src/ except reusable or unowned repositories.
+# Reusable repositories keep their own pyproject.toml files and are dependencies from this root.
+src = ["src"]
 
 [tool.ruff.format]
-# Use single quotes for ordinary strings
+# Use single quotes for ordinary strings.
 quote-style = "single"
-# Keep classic 4-space indentation (alternatives: "tab")
+# Keep classic 4-space indentation.
 indent-style = "space"
-# Disable Black’s “magic trailing comma” auto-wrapping behaviour
+# Disable Black's 'magic trailing comma' auto-wrapping behaviour.
 skip-magic-trailing-comma = true
-# Always write LF line endings, regardless of the OS that runs the formatter
+# Always write LF line endings, regardless of the OS that runs the formatter.
 line-ending = "lf"
 
-# The 'lint' table configures the linting (static code analysis) behavior.
 [tool.ruff.lint]
 
-# 'select' specifies an explicit list of rule codes/prefixes to enable. Ruff will only
-# check for rules in this list, ignoring all others. This provides a clear,
-# defined set of standards for the project.
-#
-# The selected rule sets are:
-#   - E:  pycodestyle Errors. These are important style violations from PEP 8,
-#           like indentation errors or incorrect spacing around operators.
-#   - W:  pycodestyle Warnings. These are less critical style violations from
-#           PEP 8, like trailing whitespace or blank lines.
-#   - F:  Pyflakes rules. These are crucial for catching LOGICAL ERRORS in code,
-#           such as unused imports, undefined variables, or variables that are
-#           defined but never used. This is one of the most valuable rule sets.
-#   - Q:  flake8-quotes rules. This set is specifically for enforcing a
-#           consistent quote style (single vs. double quotes) in your code.
-#   - B:  likely bugs / bad practices             (flake8-bugbear)
-#   - C4: redundant comprehensions simplification (flake8-comprehensions)
-#   - I:  import sorting                          (isort rules, Ruff-native)
-#   - UP: upgrade syntax to newer Python          (pyupgrade)
-select = ["E", "W", "F", "Q", "B", "C4", "I"]
+# 'select' specifies an explicit list of rules to enable.
+# Ruff will only check for rules in this list, ignoring all others.
+# The selected rules are:
+# - A:  flake8-builtins rules.
+#       These rules detect when a variable name shadows a Python built-in name (e.g., using 'list'
+#       as a variable name).
+# - B:  flake8-bugbear rules.
+#       These rules detect likely bugs and error-prone practices that Flake8 does not check by
+#       default.
+# - C4: flake8-comprehensions rules.
+#       These rules replace unnecessary list, set, and dictionary comprehensions with clearer forms.
+# - D:  pydocstyle rules.
+#       These rules check for PEP 257 violations in docstrings, such as missing or malformed
+#       docstrings.
+# - E:  pycodestyle errors.
+#       These rules detect important PEP 8 violations, such as invalid indentation or spacing.
+# - F:  Pyflakes rules.
+#       These rules detect logical errors such as undefined variables and unused imports.
+# - I:  isort-compatible rules implemented by Ruff.
+#       These rules sort imports into predictable sections and order them consistently.
+# - Q:  flake8-quotes rules.
+#       These rules enforce the quote styles configured below.
+# - UP: pyupgrade rules.
+#       These rules modernize Python syntax when the change is safe for the configured
+#       target-version.
+# - W:  pycodestyle warnings.
+#       These rules detect less severe PEP 8 violations, such as trailing whitespace.
 
-# Ignore PEP 8 slice-spacing clash with Black (still flagged by pycodestyle)
-extend-ignore = ["E203"]
+select = ["A", "B", "C4", "D", "E", "F", "I", "Q", "UP", "W"]
+ignore = [
+  "D100",
+  "D101",
+  "D102",
+  "D103",
+  "D104",
+  "D105",
+  "D106",
+  "D107",
+  "D203",
+  "D212",
+  "D404",
+  "E203",
+]
 
-# This section allows for fine-tuning the behavior of specific rule sets
-# that were enabled in the 'select' list above.
-# Configuration for the 'flake8-quotes' rules (which have the prefix "Q").
+# This section allows fine-tuning of the 'Q' rules (flake8-quotes).
 [tool.ruff.lint.flake8-quotes]
 
 # Enforces the use of single quotes for all inline strings (strings that do not
-# span multiple lines). When the code is formatted or fixed (e.g., on save),
-# Ruff will automatically convert "double-quoted strings" to 'single-quoted strings'.
-# Possible values: "single", "double".
+# span multiple lines).
 inline-quotes = "single"
-
 # Enforces the use of double quotes for docstrings (e.g., """My Docstring""").
-# This is the recommended convention according to PEP 257 (Docstring Conventions)
-# and is a common, strongly-held practice in the Python community.
-# Possible values: "single", "double".
 docstring-quotes = "double"
-
-# Note: You could also set `multiline-quotes` to control the quote style for
-# non-docstring, multi-line strings. If unset, it typically defaults to the
-# style of `inline-quotes`. For example:
-# multiline-quotes = "single"
+# Use triple double quotes for multiline strings so the formatter and linter agree.
+multiline-quotes = "double"
+# Keep the other quote style when it avoids inserting a backslash escape.
+avoid-escape = true
 
 [tool.ruff.lint.isort]
+# Split a 'from module import a, b, c' statement into multiple lines like:
+# from module import a
+# from module import b
+# from module import c
+force-single-line = true
+# Match Ruff's import ordering to the Google style enforced by ament_flake8.
+# Sort imports by module name without prioritizing import statements over from statements.
+force-sort-within-sections = true
+# Place external dependencies before first-party imports, as required by that Google style.
+section-order = [
+  "future",
+  "standard-library",
+  "third-party",
+  "first-party",
+  "local-folder",
+]
+# Sort imported names alphabetically instead of grouping names by capitalization.
+order-by-type = false
+#known-first-party = ["simulation"]
+#known-third-party = [
+#  "ament_index_python",
+#  "launch",
+#  "launch_ros",
+#  "pytest",
+#  "rclpy",
+#  "yaml",
+#]
 split-on-trailing-comma = false
-# Set this when you want specific import sections to stay adjacent instead of separated by blank lines.
-# Common values: "future", "standard-library", "third-party", "first-party", "local-folder".
-no-lines-before = []
